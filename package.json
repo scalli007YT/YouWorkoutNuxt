@@ -12,11 +12,12 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/ui": "^2.19.2",
+    "@nuxtjs/tailwindcss": "^6.12.2",
     "@sidebase/nuxt-auth": "^0.9.4",
     "nuxt": "^3.14.159"
   },
   "dependencies": {
-    "next-auth": "4.21.1",
-    "vuetify-nuxt-module": "^0.18.3"
+    "firebase": "^11.0.1",
+    "next-auth": "4.21.1"
   }
 }

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     "@sidebase/nuxt-auth",
-    "vuetify-nuxt-module"
+    ""
   ],
   compatibilityDate: "2024-11-12",
 
