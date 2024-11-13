@@ -16,14 +16,14 @@
       <v-spacer v-if="!data"></v-spacer>
 
 
-      <v-app-bar-title :class="{ 'center-title': !data }">
+      <v-app-bar-title v-bind:class="{ 'center-title': !data }">
         YouWorkout
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
 
       <!-- Grouped User Profile elements -->
-      <template v-if="data">
+      <!-- <template v-if="data">
         <v-btn icon @click="">
           <v-icon>mdi-theme-light-dark</v-icon>
           <v-tooltip activator="parent" location="bottom">Toggle Theme</v-tooltip>
@@ -35,9 +35,8 @@
         </v-btn>
 
         <UserProfile />
-      </template>
+      </template> -->
     </v-app-bar>
-
     <v-main>
       <NuxtPage />
     </v-main>
@@ -51,3 +50,24 @@ const drawer = ref(false);
 const { status, data } = useAuth()
 console.log(status.value)
 </script>
+
+<style scoped>
+.drawer-text {
+  text-align: center;
+  width: 100%;
+  font-size: 24px;
+}
+
+.drawer-item {
+  border-bottom: 1px solid #3f3f3f;
+}
+
+.drawer-item:last-child {
+  border-bottom: none;
+}
+
+.center-title {
+  text-align: center;
+  width: 100%;
+}
+</style>
