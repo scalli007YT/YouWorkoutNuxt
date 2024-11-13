@@ -1,11 +1,11 @@
 <template>
     <div>
         <ul class="space-y-4">
-            <li class="px-3 py-2 rounded-sm">
-
+            <!-- Ensure habit.id exists and is unique -->
+            <li v-for="habit in habits" :key="habit.id" class="px-3 py-2 rounded-sm">
                 <div class="flex items-center justify-between mb-4">
-                    <p class="text-purple-500 font-bold">Habit Name</p>
-                    <button class="text-gray-800">Delete</button>
+                    <p class="text-purple-500 font-bold">{{ habit.name }}</p>
+                    <button class="text-gray-800" @click="deleteHabit(habit.id)">Delete</button>
                 </div>
 
                 <div class="flex items-center">
@@ -13,12 +13,20 @@
                     <p class="text-sm text-gray-500">I did this today.</p>
                 </div>
 
-                <p class="text-sm text-gray-500 mt-2">Current Streak: 0 days.</p>
+                <p class="text-sm text-gray-500 mt-2">Current Streak: {{ habit.streak }} days.</p>
             </li>
         </ul>
     </div>
 </template>
 
 <script setup>
+const props = defineProps({
+    habits: Array
+})
 
+const habitStore = useHabitStore()
+
+const deleteHabit = async (id) => {
+    await habitStore.deleteHabit(id)
+}
 </script>
