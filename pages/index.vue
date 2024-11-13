@@ -13,9 +13,6 @@ import HabitList from '~/components/HabitList.vue'
 import { useHabitStore } from '~/stores/habits';
 
 const habitStore = useHabitStore()
-
-console.log(habitStore.habits)
-
 </script>
 
 <style></style>
