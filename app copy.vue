@@ -3,9 +3,11 @@
     <v-navigation-drawer v-if="data" v-model="drawer" class="content-drawer" app>
       <v-list>
         <v-list-item class="drawer-item">
-          <v-list-item-content>
-            <v-list-item-title class="drawer-text">Home</v-list-item-title>
-          </v-list-item-content>
+          <router-link to="/" style="text-decoration: none; color: inherit">
+            <v-list-item-content>
+              <v-list-item-title class="drawer-text">Home</v-list-item-title>
+            </v-list-item-content>
+          </router-link>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -16,9 +18,11 @@
       <v-spacer v-if="!data"></v-spacer>
 
 
-      <v-app-bar-title :class="{ 'center-title': !data }">
-        YouWorkout
-      </v-app-bar-title>
+      <router-link to="/" style="text-decoration: none; color: inherit">
+        <v-app-bar-title :class="{ 'center-title': !data }">
+          YouWorkout
+        </v-app-bar-title>
+      </router-link>
 
       <v-spacer></v-spacer>
 
