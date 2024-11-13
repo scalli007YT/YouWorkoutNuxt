@@ -5,6 +5,7 @@ import {
   getDocs,
   doc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 export const useHabitStore = defineStore("habitStore", {
@@ -44,5 +45,21 @@ export const useHabitStore = defineStore("habitStore", {
 
       this.habits = this.habits.filter((habit) => habit.id !== id);
     },
+
+    // updating a habit
+    async updateHabit(id, updates) {
+      const { $db } = useNuxtApp();
+      const docRef = doc($db, "habits", id);
+      await updateDoc(docRef, updates);
+
+      const index = this.habits.findIndex((habit) => habit.id === id);
+      if (index !== -1) {
+        this.habits[index] = { ...this.habits[index], ...updates };
+      }
+    },
+
+    // complete a habit
+
+    toggleCompletion(habit) {},
   },
 });
