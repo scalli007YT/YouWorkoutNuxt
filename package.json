@@ -17,6 +17,7 @@
     "nuxt": "^3.14.159"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.7.0",
     "firebase": "^11.0.1",
     "next-auth": "4.21.1"
   }
