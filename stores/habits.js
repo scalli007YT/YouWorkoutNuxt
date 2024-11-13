@@ -7,6 +7,7 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
+import { format } from "date-fns";
 
 export const useHabitStore = defineStore("habitStore", {
   state: () => ({
@@ -60,6 +61,18 @@ export const useHabitStore = defineStore("habitStore", {
 
     // complete a habit
 
-    toggleCompletion(habit) {},
+    toggleCompletion(habit) {
+      const today = format(new Date(), "dd-MM-yyyy");
+
+      if (habit.completions.includes(today)) {
+        habit.completions = habit.completions.filter((date) => date !== today);
+      } else {
+        habit.completions.push(today);
+      }
+
+      this.updateHabit(habit.id, {
+        completions: habit.completions,
+      });
+    },
   },
 });
