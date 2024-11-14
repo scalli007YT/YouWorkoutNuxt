@@ -12,9 +12,10 @@
 
 <script setup lang="ts">
 
-// definePageMeta({
-//     middleware: 'auth'
-// })
+definePageMeta({
+    middleware: 'auth'
+})
+
 // component imports
 // import HabitForm from '~/components/HabitForm.vue'
 // import HabitList from '~/components/HabitList.vue'

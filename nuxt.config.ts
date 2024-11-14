@@ -1,10 +1,15 @@
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    "@nuxt/ui",
     "@sidebase/nuxt-auth",
     "@pinia/nuxt",
-    "vuetify-nuxt-module"
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    },
   ],
   compatibilityDate: "2024-11-12",
 
@@ -17,7 +22,17 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    // Uncomment if you want global middleware
-    // globalAppMiddleware: true,
-  }
+    baseURL: `http://localhost:${process.env.PORT || 3000}`
+  },
+
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
+    },
+  },
+  build: {
+    transpile: ['vuetify'],
+  },
 })
