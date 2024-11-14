@@ -3,9 +3,19 @@
     subtitle="No Workout found in library" title="Create New Workout" @click="dialog = true">
   </v-card>
 
-  <v-dialog v-model="dialog" max-width="600">
+  <v-dialog v-model="dialog" class="max-w-3xl">
     <v-card prepend-icon="mdi-dumbbell" append-icon="mdi-dumbbell" title="Create Workout"
       class="mx-auto pa-3 max-w-2xl rounded-xl text-center text-base">
+
+      <v-divider></v-divider>
+
+      <v-list class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
+        <v-list-item v-for="n in 1" :key="n" class="pa-1">
+          <v-card flat append-icon="mdi-plus" class="border-dashed rounded-xl pa-10"
+            style="border-width: 3px; font-size: 1.5em;" title="Add Item" @click="dialog = true">
+          </v-card>
+        </v-list-item>
+      </v-list>
 
       <v-divider style="margin-bottom: 24px;"></v-divider>
 
