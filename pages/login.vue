@@ -9,7 +9,7 @@
         Welcome to My Application
       </v-card-title>
       <v-card-actions class="justify-center">
-        <v-btn v-for="provider in providers" :key="provider.id" @click="signIn(provider.id)">
+        <v-btn append-icon="mdi-link" v-for="provider in providers" :key="provider.id" @click="signIn(provider.id)">
           Sign in with {{ provider.name }}
         </v-btn>
       </v-card-actions>
