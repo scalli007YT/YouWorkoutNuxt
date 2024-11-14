@@ -1,19 +1,14 @@
 <template>
-  <v-app id="YouWorkout">
-    <v-navigation-drawer v-if="data" v-model="drawer" class="content-drawer" app>
-    </v-navigation-drawer>
-
+  <v-app>
     <v-app-bar app elevation="15" height="48">
       <v-app-bar-nav-icon v-if="data" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-spacer v-if="!data"></v-spacer>
 
+      <v-app-bar-title :class="{ 'center-title': !data }" style="margin: 0;">
+        YouWorkout
+      </v-app-bar-title>
 
-      <router-link to="/" style="text-decoration: none; color: inherit">
-        <v-app-bar-title :class="{ 'center-title': !data }">
-          YouWorkout
-        </v-app-bar-title>
-      </router-link>
 
       <v-spacer></v-spacer>
 
@@ -42,6 +37,7 @@
 <!-- <NuxtPage /> -->
 
 <script setup lang="ts">
+import { Style } from '#build/components';
 import { ref, watch } from 'vue';
 const drawer = ref(false);
 
@@ -49,20 +45,6 @@ const { status, data } = useAuth()
 </script>
 
 <style scoped>
-.drawer-text {
-  text-align: center;
-  width: 100%;
-  font-size: 24px;
-}
-
-.drawer-item {
-  border-bottom: 1px solid #3f3f3f;
-}
-
-.drawer-item:last-child {
-  border-bottom: none;
-}
-
 .center-title {
   text-align: center;
   width: 100%;

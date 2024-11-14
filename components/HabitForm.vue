@@ -5,15 +5,12 @@
         <button type="submit" class="w-full p-3 bg-purple-500 text-white rounded-sm">
             Add Habit
         </button>
-        <select v-model="$colorMode.preference">
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-        </select>
     </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useHabitStore } from '~/stores/habits'
 
 const name = ref('')
 const habitStore = useHabitStore()

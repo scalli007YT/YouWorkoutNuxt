@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxtjs/tailwindcss": "^6.12.2",
     "@sidebase/nuxt-auth": "^0.9.4",
     "nuxt": "^3.14.159",
     "vite-plugin-vuetify": "^2.0.4",

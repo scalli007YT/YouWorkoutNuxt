@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   modules: [
     "@sidebase/nuxt-auth",
     "@pinia/nuxt",
+    "@nuxtjs/tailwindcss",
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
