@@ -3,17 +3,16 @@
     subtitle="No Workout found in library" title="Create New Workout" @click="dialog = true">
   </v-card>
 
-  <v-dialog v-model="dialog" class="max-w-3xl">
+  <v-dialog v-model="dialog">
     <v-card prepend-icon="mdi-dumbbell" append-icon="mdi-dumbbell" title="Create Workout"
-      class="mx-auto pa-3 max-w-2xl rounded-xl text-center text-base">
+      class="mx-auto pa-3 rounded-xl text-center text-base" style="max-width: 36em;">
 
       <v-divider></v-divider>
 
       <v-list class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
-        <v-list-item v-for="n in 1" :key="n" class="pa-1">
-          <v-card flat append-icon="mdi-plus" class="border-dashed rounded-xl pa-10"
-            style="border-width: 3px; font-size: 1.5em;" title="Add Item" @click="dialog = true">
-          </v-card>
+        <v-list-item v-for="n in 3" :key="n" class="pa-1">
+          <ItemCard />
+
         </v-list-item>
       </v-list>
 
@@ -21,31 +20,15 @@
 
       <v-card-text>
         <v-row dense>
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field label="First name*" required></v-text-field>
-          </v-col>
-
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field hint="example of helper text only on focus" label="Middle name"></v-text-field>
-          </v-col>
-
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field hint="example of persistent helper text" label="Last name*" persistent-hint
-              required></v-text-field>
-          </v-col>
-
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field label="Email*" required></v-text-field>
-          </v-col>
-
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field label="Password*" type="password" required></v-text-field>
-          </v-col>
-
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field label="Confirm Password*" type="password" required></v-text-field>
-          </v-col>
-
+          <v-text-field label="Name*" variant="solo" v-model="name"></v-text-field>
+        </v-row>
+        <v-row dense>
+          <v-select label="Muscle Group*" :items="['Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']" variant="solo"
+            v-model="musclegroup" chips multiple>
+          </v-select>
+        </v-row>
+        <v-row dense>
+          <v-select label="Intensity" :items="['Low', 'Medium', 'High']" variant="solo" v-model="intensity"></v-select>
         </v-row>
       </v-card-text>
 
@@ -53,7 +36,8 @@
 
       <v-card-actions>
         <v-btn text="Close" variant="plain" @click="dialog = false"></v-btn>
-        <v-btn color="primary" text="Save" variant="tonal" @click="dialog = false"></v-btn>
+        <v-btn color="primary" text="Save" variant="tonal" @click="handleSubmit"></v-btn>
+        <!-- Call handleSubmit here -->
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -62,16 +46,21 @@
 <script setup>
 import { ref } from 'vue'
 
+const name = ref('')
+const intensity = ref('Medium') // Default value for intensity
+const musclegroup = ref([]) // Default value for muscle group
 const dialog = ref(false)
-</script>
 
-<script>
-export default {
-  data() {
-    return {
-      dialog: false,
-    }
-  },
+const workoutStore = useWorkoutStore()
+
+const handleSubmit = async () => {
+  const trimmedName = name.value.trim(); // Remove leading/trailing spaces from the name
+
+  if (trimmedName && musclegroup.value.length > 0 && intensity.value) {
+    console.log("submitting");
+    await workoutStore.addWorkout(trimmedName, "test", intensity.value, musclegroup.value);
+    dialog.value = false; // Close the dialog after submission
+  }
 }
 </script>
 
@@ -79,7 +68,6 @@ export default {
 .v-card__title {
   text-align: center;
   font-size: 1.5rem;
-  /* Adjust this value to make the title larger */
   font-weight: bold;
 }
 </style>

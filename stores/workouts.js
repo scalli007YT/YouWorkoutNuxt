@@ -26,15 +26,17 @@ export const useWorkoutStore = defineStore("workoutStore", {
     },
 
     // adding new habits
-    async addWorkout(name, videos, difficulty, group) {
+    async addWorkout(name, contents, intensity, musclegroup) {
       const { $db } = useNuxtApp();
+      const { data } = useAuth();
 
       const workout = {
+        contents,
         name,
-        videos,
-        difficulty,
-        group,
+        musclegroup,
+        intensity,
         completions: 0,
+        user: data.value.user.email,
       };
 
       // add habit in firebase

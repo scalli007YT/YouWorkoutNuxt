@@ -13,7 +13,7 @@
 
 </template>
 <script setup>
-const { status, data, signOut } = useAuth()
+const { data, signOut } = useAuth()
 
 </script>
 
