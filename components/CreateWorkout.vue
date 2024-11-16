@@ -10,11 +10,11 @@
       <v-divider></v-divider>
 
       <v-list class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
-        <v-list-item v-for="n in 3" :key="n" class="pa-1">
-          <ItemCard />
-
+        <v-list-item v-for="index in 2" :key="index" class="pa-1">
+          <ItemCard :index="index" />
         </v-list-item>
       </v-list>
+
 
       <v-divider style="margin-bottom: 24px;"></v-divider>
 
@@ -35,7 +35,7 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn text="Close" variant="plain" @click="dialog = false"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="dialog = false"></v-btn>
         <v-btn color="primary" text="Save" variant="tonal" @click="handleSubmit"></v-btn>
         <!-- Call handleSubmit here -->
       </v-card-actions>
@@ -52,13 +52,14 @@ const musclegroup = ref([]) // Default value for muscle group
 const dialog = ref(false)
 
 const workoutStore = useWorkoutStore()
+const videoStore = useVideoStore();
 
 const handleSubmit = async () => {
   const trimmedName = name.value.trim(); // Remove leading/trailing spaces from the name
 
   if (trimmedName && musclegroup.value.length > 0 && intensity.value) {
     console.log("submitting");
-    await workoutStore.addWorkout(trimmedName, "test", intensity.value, musclegroup.value);
+    await workoutStore.addWorkout(trimmedName, videoStore.videoLinks, intensity.value, musclegroup.value);
     dialog.value = false; // Close the dialog after submission
   }
 }
