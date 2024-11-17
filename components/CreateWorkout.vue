@@ -82,6 +82,13 @@ const handleSubmit = async () => {
     console.log("submitting");
     await workoutStore.addWorkout(trimmedName, videoStore.video, intensity.value, musclegroup.value);
     dialog.value = false; // Close the dialog after submission
+
+    // Reset all the form values to their initial states
+    name.value = '';
+    musclegroup.value = [];
+    intensity.value = 'Medium'; // Reset to the default intensity
+    videoStore.$reset(); // Reset video store if necessary
+    refreshKey.value++; // Refresh list if needed
   }
 }
 

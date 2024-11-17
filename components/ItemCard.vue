@@ -1,7 +1,7 @@
 <template>
-  <v-card flat class="border-dashed rounded-xl relative overflow-hidden" style="border-width: 3px; font-size: 1.5em;"
-    @click="handleClick">
-    <div class="flex items-center justify-center min-h-[130px] min-w-[172px] max-h-[130px] max-w-[172px]">
+  <v-card flat :class="['border-solid', 'rounded-xl', 'relative', 'overflow-hidden', { 'animate-pulse': !Content }]"
+    style="border-width: 3px; font-size: 1.5em;" @click="handleClick">
+    <div class="flex items-center justify-center h-[96.75px] w-[172px]">
       <template v-if="!Content">
         <v-row align="center" justify="center" no-gutters>
           <v-col class="flex justify-center" cols="auto">Add</v-col>
@@ -11,13 +11,16 @@
         </v-row>
       </template>
       <template v-if="Content">
+
         <div class="relative w-full h-full">
           <!-- Image with rounded corners -->
-          <v-img class="absolute top-0 left-0 h-full w-full object-cover rounded-xl" :src="thumbnail"></v-img>
+          <v-img class="absolute top-0 left-0 h-full w-full object-cover rounded-xl blur-[1px]"
+            :src="thumbnail"></v-img>
           <!-- Overlay with text -->
-          <div class="absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl">
-            <v-card-text class="text-white font-bold text-lg w-full break-words whitespace-normal text-center">
-              {{ videoTitle }}
+          <div class="absolute inset-0 flex items-center justify-center rounded-xl"
+            style="background-color: rgba(var(--v-theme-background), 0.6)">
+            <v-card-text class="whitespace-normal">
+              {{ truncatedTitle }}
             </v-card-text>
           </div>
         </div>
@@ -84,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 
 // Props
 const props = defineProps({
@@ -100,6 +103,12 @@ const youtubeLink = ref(videoStore.getVideoDetails(props.index).link || ''); // 
 const valid = ref(false); // Link validation state
 const videoTitle = ref(videoStore.getVideoDetails(props.index).name || ''); // Video title
 
+// Computed property to truncate the title
+const truncatedTitle = computed(() => {
+  return videoTitle.value.length > 32
+    ? videoTitle.value.slice(0, 32) + '...'
+    : videoTitle.value;
+});
 
 // Validate YouTube link
 const validateLink = async () => {
