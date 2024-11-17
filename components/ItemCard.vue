@@ -4,11 +4,14 @@
       <template v-if="!Content">
         <v-row align="center" justify="center" no-gutters>
           <v-col class="flex justify-center" cols="auto">
-            Add {{ index }}
+            Add
           </v-col>
           <v-col class="flex justify-center" cols="auto">
             <v-icon>mdi-plus</v-icon>
+
           </v-col>
+
+
         </v-row>
       </template>
       <template v-if="Content">
@@ -32,8 +35,8 @@
             <v-text-field label="Youtube Link*" v-model="youtubeLink" @input="validateLink"></v-text-field>
           </v-row>
           <v-row v-if="valid">
-            <v-card flat class="border-dashed rounded-xl mx-auto min-w-full d-flex align-center justify-center"
-              style="border-width: 3px; font-size: 1.5em;" @click="handleClick">
+            <v-card flat class="border-dotted rounded-xl mx-auto min-w-full d-flex align-center justify-center"
+              style="border-width: 2px; font-size: 1.5em;" @click="saveVideoLink">
               <v-row class="align-center justify-center">
                 <v-col class="d-flex align-center justify-center">
                   <v-img :src="thumbnail" />
@@ -48,7 +51,18 @@
       </v-col>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn text="Cancel" variant="plain" @click="videoDialog = false"></v-btn>
+        <v-row>
+          <v-col class="text-left">
+            <v-btn v-if="Content" text="Delete" variant="plain" @click="handleDelete"></v-btn>
+          </v-col>
+          <v-col class="text-right">
+            <v-btn text="Exit" variant="plain" @click="videoDialog = false"></v-btn>
+          </v-col>
+
+        </v-row>
+
+
+
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -71,10 +85,11 @@ const videoTitle = ref(""); // Video title
 
 // Validate YouTube link
 const validateLink = async () => {
-  const youtubeRegex = /^https:\/\/www\.youtube\.com\/watch\?v=.+$/;
-  valid.value = youtubeRegex.test(youtubeLink.value);
+  valid.value = /^https:\/\/www\.youtube\.com\/watch\?v=.+$/.test(youtubeLink.value);
   if (valid.value) {
     await fetchVideoTitle();
+  } else {
+    videoTitle.value = "";  // Clear title if invalid link
   }
 };
 
@@ -91,28 +106,44 @@ const fetchVideoTitle = async () => {
   try {
     const response = await fetch(`/api/fetch-youtube-title?url=${encodeURIComponent(youtubeLink.value)}`);
     const data = await response.json();
-
-    if (data.title) {
-      videoTitle.value = data.title;
-    } else {
-      videoTitle.value = 'Error fetching title';
-      console.error(data.error);
-    }
+    videoTitle.value = data.title || 'Invalid Link';
   } catch (error) {
     console.error('Error fetching video title:', error);
     videoTitle.value = 'Error fetching title';
   }
 };
 
-
 // Handle click for adding or editing video
 const handleClick = () => {
-  videoDialog.value = !Content.value;
+  if (Content.value) {
+    // If content exists, open the video dialog to edit the video
+    videoDialog.value = true;
+  } else {
+    // If no content, toggle the dialog to add a new video
+    videoDialog.value = !Content.value;
+  }
 };
 
-// Save video link
-const saveVideoLink = () => {
-  Content.value = true;
+// Handle click for deleting video
+const handleDelete = () => {
+  // Remove video details from the store
+  videoStore.removeIndex(props.index);
+
+  // Reset the content state to indicate the video is deleted
+  Content.value = false;
+  youtubeLink.value = "";  // Clear the YouTube link input
+  videoTitle.value = "";   // Clear the video title
+  valid.value = false;     // Reset validation state
+
+  // Close the dialog
   videoDialog.value = false;
+};
+
+const videoStore = useVideoStore()
+const saveVideoLink = () => {
+  videoStore.setVideoDetails(props.index, videoTitle.value, thumbnail.value, youtubeLink.value)
+  Content.value = true;
+  videoDialog.value = !Content.value;
+
 };
 </script>

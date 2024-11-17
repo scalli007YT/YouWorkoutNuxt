@@ -1,6 +1,6 @@
 <template>
   <v-card flat append-icon="mdi-plus" class="border-dashed rounded-xl pa-1" style="border-width: 3px; font-size: 1.5em;"
-    subtitle="No Workout found in library" title="Create New Workout" @click="dialog = true">
+    subtitle="No Workout found in library" title="Create New Workout" @click="handleDialog">
   </v-card>
 
   <v-dialog v-model="dialog">
@@ -9,12 +9,12 @@
 
       <v-divider></v-divider>
 
+      <!-- Dynamic list of ItemCard components -->
       <v-list class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
-        <v-list-item v-for="index in 2" :key="index" class="pa-1">
+        <v-list-item v-for="index in card_amount" :key="index" class="pa-1">
           <ItemCard :index="index" />
         </v-list-item>
       </v-list>
-
 
       <v-divider style="margin-bottom: 24px;"></v-divider>
 
@@ -46,20 +46,28 @@
 <script setup>
 import { ref } from 'vue'
 
+const workoutStore = useWorkoutStore()
+const videoStore = useVideoStore();
+
 const name = ref('')
 const intensity = ref('Medium') // Default value for intensity
 const musclegroup = ref([]) // Default value for muscle group
 const dialog = ref(false)
+const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
-const workoutStore = useWorkoutStore()
-const videoStore = useVideoStore();
+
+// Handle click for adding or editing video
+const handleDialog = () => {
+  videoStore.$reset()
+  dialog.value = true;
+};
 
 const handleSubmit = async () => {
   const trimmedName = name.value.trim(); // Remove leading/trailing spaces from the name
 
   if (trimmedName && musclegroup.value.length > 0 && intensity.value) {
     console.log("submitting");
-    await workoutStore.addWorkout(trimmedName, videoStore.videoLinks, intensity.value, musclegroup.value);
+    await workoutStore.addWorkout(trimmedName, videoStore.video, intensity.value, musclegroup.value);
     dialog.value = false; // Close the dialog after submission
   }
 }
