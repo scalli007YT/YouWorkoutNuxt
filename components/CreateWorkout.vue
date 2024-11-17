@@ -9,8 +9,8 @@
 
       <v-divider></v-divider>
 
-      <!-- Dynamic list of ItemCard components -->
-      <v-list class="d-flex self-center mx-6" :key="reloadKey" style="overflow-x: auto; white-space: nowrap;">
+      <!-- Dynamic list of ItemCard components with dynamic key -->
+      <v-list :key="refreshKey" class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
         <v-list-item v-for="index in card_amount" :key="index" class="pa-1">
           <ItemCard :index="index" />
         </v-list-item>
@@ -37,15 +37,14 @@
       <v-card-actions>
         <v-btn text="Cancel" variant="plain" @click="dialog = false"></v-btn>
         <v-btn color="primary" text="Save" variant="tonal" @click="handleSubmit"></v-btn>
-        <!-- Debug Button -->
-        <v-btn color="error" text="Debug Reload" variant="outlined" @click="reloadList">Reload Cards</v-btn>
+        <!-- Call handleSubmit here -->
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const workoutStore = useWorkoutStore()
 const videoStore = useVideoStore();
@@ -54,13 +53,19 @@ const name = ref('')
 const intensity = ref('Medium') // Default value for intensity
 const musclegroup = ref([]) // Default value for muscle group
 const dialog = ref(false)
+const refreshKey = ref(0); // Unique key to force re-render
+
+// Computed property to get the number of cards to render
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
-const reloadKey = ref(0);
-
-const reloadList = () => {
-  console.log('Reloading cards...');
-  reloadKey.value += 1; // Increment the key to force re-render
+// Watch for changes in card_amount and trigger necessary updates
+watch(card_amount, (newCount) => {
+  refreshList()
+  console.log('Card amount changed:', newCount);
+});
+// Function to refresh the list
+const refreshList = () => {
+  refreshKey.value++;
 };
 
 
@@ -79,6 +84,7 @@ const handleSubmit = async () => {
     dialog.value = false; // Close the dialog after submission
   }
 }
+
 </script>
 
 <style scoped>
