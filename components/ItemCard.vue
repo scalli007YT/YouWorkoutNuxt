@@ -40,14 +40,11 @@
           </v-row>
           <v-row v-if="valid">
             <v-card flat class="border rounded-xl mx-auto min-w-full d-flex align-center justify-center"
-              style="border-width: 2px; font-size: 1.5em;" @click="saveVideoLink">
+              style="border-width: 2px; font-size: 1.5em;" v-if="videoTitle" @click="saveVideoLink">
               <v-row class="align-center justify-center mx-auto my-auto">
                 <v-col class="d-flex align-center justify-center">
                   <template v-if="thumbnail">
                     <v-img class="rounded-xl" :src="thumbnail" />
-                  </template>
-                  <template v-else>
-                    <v-skeleton-loader type="card" />
                   </template>
                 </v-col>
                 <v-col class="d-flex align-center justify-center">
@@ -64,6 +61,16 @@
                 </v-col>
               </v-row>
             </v-card>
+
+            <v-card v-else flat class="border rounded-xl mx-auto d-flex align-center justify-center w-full h-full"
+              style="border-width: 2px; font-size: 1.5em;" @click="saveVideoLink">
+              <v-col>
+                <v-row>
+                  <v-skeleton-loader type="list-item-avatar"></v-skeleton-loader>
+                </v-row>
+              </v-col>
+            </v-card>
+
           </v-row>
         </v-card-text>
       </v-col>

@@ -17,32 +17,41 @@ export const useWorkoutStore = defineStore("workoutStore", {
     // fetching all habits
     async fetchHabits() {
       const { $db } = useNuxtApp();
+      const { data } = useAuth();
 
-      const snapshot = await getDocs(collection($db, "workouts"));
+      const user_name = data.value.user.email; // Use the authenticated user's email or ID
+
+      // Fetch workouts from the user's 'workouts' subcollection
+      const snapshot = await getDocs(
+        collection($db, "users", user_name, "workouts")
+      );
+
+      // Update the local state with the fetched workouts
       this.workouts = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
     },
 
-    // adding new habits
+    // adding new workouts
     async addWorkout(name, contents, intensity, musclegroup) {
       const { $db } = useNuxtApp();
       const { data } = useAuth();
-
       const workout = {
         contents,
         name,
         musclegroup,
         intensity,
         completions: 0,
-        user: data.value.user.email,
       };
 
-      // add habit in firebase
-      const docRef = await addDoc(collection($db, "workouts"), workout);
+      // Add the workout to the user's 'workouts' subcollection
+      const docRef = await addDoc(
+        collection($db, "users", data.value.user.email, "workouts"),
+        workout
+      );
 
-      // add habit to pinia store
+      // add workout to pinia store
       this.workouts.push({ id: docRef.id, ...workout });
     },
   },
