@@ -5,6 +5,8 @@
       <ListItem :index="index" :workout="workout" />
     </v-list-item>
   </v-list>
+
+
 </template>
 
 <script lang="ts" setup>

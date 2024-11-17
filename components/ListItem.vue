@@ -12,17 +12,23 @@
             <v-chip prepend-icon="mdi-arm-flex" variant="outlined" size="large">{{ workout?.intensity
               }}</v-chip>
             <v-divider vertical inset class="mx-1"></v-divider>
-            <v-chip variant="outlined" size="normal" prepend-icon="mdi-tag-heart" class="pa-1">
+            <v-chip variant="outlined" size="large" class="pa-2">
               <!-- Added the d-flex flex-wrap class to wrap chips -->
-              <v-chip v-for="(group, index) in workout?.musclegroup.slice(0, 3)" :key="index" variant="text"
-                size="x-small">
+              <v-icon>mdi-target</v-icon>
+              <v-chip v-for="(group, index) in workout?.musclegroup.slice(0, 2)" :key="index" variant="text"
+                size="small">
                 {{ group }}
               </v-chip>
-              <v-chip v-if="workout?.musclegroup.length > 3" variant="text" size="x-small">
+              <v-chip v-if="workout?.musclegroup.length > 2" variant="text" size="x-small">
                 ...
               </v-chip>
               <v-tooltip activator="parent" location="right">{{ workout?.musclegroup.join(', ') }}</v-tooltip>
             </v-chip>
+            <v-divider vertical inset class="mx-1"></v-divider>
+
+            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large">
+              {{ workout?.completions }}</v-chip>
+
           </v-card-subtitle>
         </v-row>
       </v-col>
@@ -31,11 +37,11 @@
       <v-col>
         <v-row class="justify-end">
           <v-chip elevation="8" size="normal" variant="text">
-            <v-btn flat icon @click="onSecondActionClick" size="large">
+            <v-btn flat icon @click="handleEdit(workout)" size="large">
               <v-icon size="x-large">mdi-pencil</v-icon>
             </v-btn>
             <v-divider vertical></v-divider>
-            <v-btn flat icon @click="onPlayClick" size="large">
+            <v-btn flat icon @click="handlePlay(workout)" size="large">
               <v-icon size="x-large">mdi-play</v-icon>
             </v-btn>
           </v-chip>
@@ -43,6 +49,7 @@
       </v-col>
     </v-row>
   </v-card>
+
 </template>
 
 <script lang="ts" setup>
@@ -65,13 +72,19 @@ async function fetchWorkouts() {
   }
 }
 
-// Actions for the appended icons
-function onPlayClick() {
-  console.log("Play button clicked!");
+function handleEdit(workout) {
+  console.log('Edit button clicked!')
+
+  const editVideos = ref(workout.contents || {});  // Extract videos or set empty object if no videos
+  const editName = ref(workout.name || '');  // Extract the name of the workout
+  const editMuscleGroup = ref(workout.musclegroup || []);  // Join muscle groups as a string
+  const editIntensity = ref(workout.intensity || '');  // Extract the intensity level
+  console.log(editVideos.value)
+  console.log('got Value')
 }
 
-function onSecondActionClick() {
-  console.log("Second button clicked!");
+function handlePlay(workout: object) {
+  console.log('Play button!')
 }
 
 onMounted(fetchWorkouts);
