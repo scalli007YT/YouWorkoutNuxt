@@ -41,6 +41,9 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <WorkoutList />
+
 </template>
 
 <script setup>
