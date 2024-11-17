@@ -10,7 +10,7 @@
       <v-divider></v-divider>
 
       <!-- Dynamic list of ItemCard components -->
-      <v-list class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
+      <v-list class="d-flex self-center mx-6" :key="reloadKey" style="overflow-x: auto; white-space: nowrap;">
         <v-list-item v-for="index in card_amount" :key="index" class="pa-1">
           <ItemCard :index="index" />
         </v-list-item>
@@ -37,7 +37,8 @@
       <v-card-actions>
         <v-btn text="Cancel" variant="plain" @click="dialog = false"></v-btn>
         <v-btn color="primary" text="Save" variant="tonal" @click="handleSubmit"></v-btn>
-        <!-- Call handleSubmit here -->
+        <!-- Debug Button -->
+        <v-btn color="error" text="Debug Reload" variant="outlined" @click="reloadList">Reload Cards</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -54,6 +55,13 @@ const intensity = ref('Medium') // Default value for intensity
 const musclegroup = ref([]) // Default value for muscle group
 const dialog = ref(false)
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
+
+const reloadKey = ref(0);
+
+const reloadList = () => {
+  console.log('Reloading cards...');
+  reloadKey.value += 1; // Increment the key to force re-render
+};
 
 
 // Handle click for adding or editing video

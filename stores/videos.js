@@ -18,6 +18,7 @@ export const useVideoStore = defineStore("videoStore", {
           delete this.video[index + 1 + n];
         }
       } else {
+        delete this.video[index];
         console.log("index is the last");
       }
     },
