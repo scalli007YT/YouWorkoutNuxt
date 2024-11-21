@@ -72,8 +72,9 @@ async function fetchWorkouts() {
   }
 }
 
-function handleEdit(workout) {
+function handleEdit(workout: any) {
   console.log('Edit button clicked!')
+  console.log('getting value: ', props.index)
 
   const editVideos = ref(workout.contents || {});  // Extract videos or set empty object if no videos
   const editName = ref(workout.name || '');  // Extract the name of the workout
