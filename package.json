@@ -10,10 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "1.6.1",
+    "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@sidebase/nuxt-auth": "^0.9.4",
-    "nuxt": "3.14.1592",
+    "nuxt": "^3.14.159",
     "vite-plugin-vuetify": "^2.0.4",
     "vuetify": "^3.7.4"
   },
@@ -21,7 +21,7 @@
     "@mdi/font": "^7.4.47",
     "@pinia/nuxt": "^0.7.0",
     "date-fns": "^4.1.0",
-    "firebase": "11.0.2",
-    "next-auth": "4.24.10"
+    "firebase": "^11.0.1",
+    "next-auth": "4.21.1"
   }
 }

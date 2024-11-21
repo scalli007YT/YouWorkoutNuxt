@@ -14,24 +14,6 @@ export const useWorkoutStore = defineStore("workoutStore", {
     workouts: [],
   }),
   actions: {
-    // fetching all habits
-    async fetchHabits() {
-      const { $db } = useNuxtApp();
-      const { data } = useAuth();
-      const user_name = data.value.user.email; // Use the authenticated user's email or ID
-
-      // Fetch workouts from the user's 'workouts' subcollection
-      const snapshot = await getDocs(
-        collection($db, "users", user_name, "workouts")
-      );
-
-      // Update the local state with the fetched workouts
-      this.workouts = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-    },
-
     // adding new workouts
     async addWorkout(name, contents, intensity, musclegroup) {
       const { $db } = useNuxtApp();
@@ -53,6 +35,8 @@ export const useWorkoutStore = defineStore("workoutStore", {
       // Add workout to the Pinia store (if needed)
       this.workouts.push({ id: docRef.id, ...workout });
     },
+
+    async updateWorkout(name, contents, intensity, musclegroup) {},
 
     // Get workouts for the logged-in user
     async getUserWorkouts() {

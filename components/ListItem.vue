@@ -48,6 +48,8 @@
         </v-row>
       </v-col>
     </v-row>
+
+    <!-- Conditional Rendering of EditWorkout.vue -->
   </v-card>
 
 </template>
@@ -80,6 +82,7 @@ function handleEdit(workout: any) {
   const editName = ref(workout.name || '');  // Extract the name of the workout
   const editMuscleGroup = ref(workout.musclegroup || []);  // Join muscle groups as a string
   const editIntensity = ref(workout.intensity || '');  // Extract the intensity level
+
   console.log(editVideos.value)
   console.log('got Value')
 }

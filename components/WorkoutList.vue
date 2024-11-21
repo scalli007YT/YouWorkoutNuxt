@@ -23,13 +23,12 @@ async function fetchWorkouts() {
     console.warn("No workouts found");
   }
 }
+
 // Actions for the appended icons
 function onPlayClick() {
   console.log("Play button clicked!");
 }
-function onSecondActionClick() {
-  console.log("Second button clicked!");
-}
+
 // Automatically fetch workouts when the module is loaded
 onMounted(fetchWorkouts);
 </script>

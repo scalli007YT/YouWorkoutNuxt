@@ -49,53 +49,48 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue';
+import { useWorkoutStore } from '@/stores/workoutStore';
+import { doc, getDoc } from 'firebase/firestore';
+import { useNuxtApp } from '#app';
 
-const workoutStore = useWorkoutStore()
-const videoStore = useVideoStore();
-
-const name = ref('')
-const intensity = ref('Medium')     // Default value for intensity
-const musclegroup = ref([])         // Default value for muscle group
-const dialog = ref(false)
-const refreshKey = ref(0);          // Unique key to force re-render
-
-// Computed property to get the number of cards to render
-const card_amount = computed(() => videoStore.getVideoCount() + 1);
-
-// Watch for changes in card_amount and trigger necessary updates
-watch(card_amount, (newCount) => {
-    refreshList()
-    console.log('Card amount changed:', newCount);
+// Props
+const props = defineProps({
+    videos: { type: Object, required: true },
+    name: { required: true },
+    musclegroup: { required: true },
+    intensity: { required: true },
 });
-// Function to refresh the list
-const refreshList = () => {
-    refreshKey.value++;
-};
-// Handle click for adding or editing video
-const handleDialog = () => {
-    videoStore.$reset()
-    dialog.value = true;
-};
+
+const workoutStore = useWorkoutStore();
+
+// Reactive variables
+const name = ref(name);
+const intensity = ref(intensity); // Default value for intensity
+const musclegroup = ref(musclegroup); // Default value for muscle group
+
+const dialog = ref(false);
+const refreshKey = ref(0); // Unique key to force re-render
+
 
 const handleSubmit = async () => {
-    const trimmedName = name.value.trim(); // Remove leading/trailing spaces from the name
+    const trimmedName = name.value.trim();
 
     if (trimmedName && musclegroup.value.length > 0 && intensity.value) {
-        console.log("submitting");
-        await workoutStore.addWorkout(trimmedName, videoStore.video, intensity.value, musclegroup.value);
-        dialog.value = false; // Close the dialog after submission
+        console.log("Submitting workout update");
 
-        // Reset all the form values to their initial states
+        await workoutStore.addWorkout(trimmedName, videoStore.video, intensity.value, musclegroup.value);
+
+        // Reset the dialog and refresh values
+        dialog.value = false;
         name.value = '';
         musclegroup.value = [];
-        intensity.value = 'Medium'; // Reset to the default intensity
-        videoStore.$reset(); // Reset video store if necessary
-        refreshKey.value++; // Refresh list if needed
+        intensity.value = 'Medium';
+        refreshKey.value++;
     }
-}
-
+};
 </script>
+
 
 <style scoped>
 .v-card__title {
