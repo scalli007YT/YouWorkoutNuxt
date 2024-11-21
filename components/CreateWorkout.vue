@@ -64,7 +64,6 @@ const card_amount = computed(() => videoStore.getVideoCount() + 1);
 // Watch for changes in card_amount and trigger necessary updates
 watch(card_amount, (newCount) => {
   refreshList()
-  console.log('Card amount changed:', newCount);
 });
 // Function to refresh the list
 const refreshList = () => {

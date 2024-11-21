@@ -7,7 +7,6 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { format, differenceInDays } from "date-fns";
 
 export const useWorkoutStore = defineStore("workoutStore", {
   state: () => ({
@@ -36,10 +35,34 @@ export const useWorkoutStore = defineStore("workoutStore", {
       this.workouts.push({ id: docRef.id, ...workout });
     },
 
-    async updateWorkout(name, contents, intensity, musclegroup) {},
+    // adding new workouts
+    async updateWorkout(id, name, contents, intensity, musclegroup) {
+      const workout = {
+        contents,
+        name,
+        musclegroup,
+        intensity,
+        completions: 0,
+      };
+
+      const { $db } = useNuxtApp();
+      const { data } = useAuth();
+      const docRef = doc($db, "users", data.value.user.email, "workouts", id);
+      await updateDoc(docRef, workout);
+
+      // Fix: Correctly find and update the workout in the workouts array
+      const updateIndex = this.workouts.findIndex((w) => w.id === id);
+      if (updateIndex !== -1) {
+        // Correctly update the workout at the found index
+        this.workouts[updateIndex] = {
+          ...this.workouts[updateIndex],
+          ...workout,
+        };
+      }
+    },
 
     // Get workouts for the logged-in user
-    async getUserWorkouts() {
+    async updateUserWorkouts() {
       const { $db } = useNuxtApp();
       const { data } = useAuth();
       const user_name = data.value.user.email;
@@ -49,11 +72,16 @@ export const useWorkoutStore = defineStore("workoutStore", {
         collection($db, "users", user_name, "workouts")
       );
 
-      // Return the list of workouts
-      return snapshot.docs.map((doc) => ({
+      // Map the snapshot docs to the workout data
+      const fetchedWorkouts = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+
+      // Push the fetched workouts to the Pinia store
+      this.workouts.push(...fetchedWorkouts);
+
+      return fetchedWorkouts;
     },
   },
 });

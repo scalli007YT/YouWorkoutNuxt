@@ -1,3 +1,18 @@
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue';
+const store = useWorkoutStore();
+// Automatically fetch workouts when the module is loaded
+onMounted(store.updateUserWorkouts);
+const workouts = ref(store.workouts);
+
+
+// Actions for the appended icons
+function onPlayClick() {
+  console.log("Play button clicked!");
+}
+
+</script>
+
 <template>
   <v-list class="pa-0">
     <!-- Loop through workouts and display each one inside a v-card -->
@@ -8,29 +23,5 @@
 
 
 </template>
-
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-
-const store = useWorkoutStore();
-const workouts = ref();
-
-async function fetchWorkouts() {
-  const workoutData = await store.getUserWorkouts();
-  if (workoutData.length > 0) {
-    workouts.value = workoutData; // Set the fetched workouts
-  } else {
-    console.warn("No workouts found");
-  }
-}
-
-// Actions for the appended icons
-function onPlayClick() {
-  console.log("Play button clicked!");
-}
-
-// Automatically fetch workouts when the module is loaded
-onMounted(fetchWorkouts);
-</script>
 
 <style></style>
