@@ -79,7 +79,7 @@ export const useWorkoutStore = defineStore("workoutStore", {
       }));
 
       // Clear the current workouts in the store
-      // this.workouts = [];
+      this.workouts = [];
 
       // Add the fetched workouts to the Pinia store
       this.workouts.push(...fetchedWorkouts);

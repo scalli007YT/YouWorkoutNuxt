@@ -1,5 +1,6 @@
 <template>
-  <v-card flat :class="['border-solid', 'rounded-xl', 'relative', 'overflow-hidden', { 'animate-pulse': !Content }]"
+  <v-card flat
+    :class="['border-solid', 'rounded-xl', 'relative', 'overflow-hidden', { 'animate-pulse': !Content, 'border-dashed': !Content }]"
     style="border-width: 3px; font-size: 1.5em;" @click="handleClick">
     <div class="flex items-center justify-center h-[96.75px] w-[172px]">
       <template v-if="!Content">
@@ -11,7 +12,6 @@
         </v-row>
       </template>
       <template v-if="Content">
-
         <div class="relative w-full h-full">
           <!-- Image with rounded corners -->
           <v-img class="absolute top-0 left-0 h-full w-full object-cover rounded-xl blur-[1px]"
@@ -27,6 +27,7 @@
       </template>
     </div>
   </v-card>
+
 
 
   <!-- Dialog for Add Video -->
