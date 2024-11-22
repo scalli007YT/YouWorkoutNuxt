@@ -123,6 +123,8 @@ const refreshList = () => {
 
 // Function to Delete the Workout
 const handleDelete = () => {
+  store.deleteWorkout(workout.id)
+  dialogState.value = false;
 };
 
 const toggleEdit = () => {

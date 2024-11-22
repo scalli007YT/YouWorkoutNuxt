@@ -85,5 +85,18 @@ export const useWorkoutStore = defineStore("workoutStore", {
       this.workouts.push(...fetchedWorkouts);
       return fetchedWorkouts;
     },
+
+    // deleting habits
+    async deleteWorkout(id) {
+      const { $db } = useNuxtApp();
+      const { data } = useAuth();
+
+      // delete from Firebase
+      const docRef = doc($db, "users", data.value.user.email, "workouts", id);
+      await deleteDoc(docRef);
+
+      // Ensure workouts is correctly populated
+      this.workouts = this.workouts.filter((workout) => workout.id !== id); // Use the reactive workouts array
+    },
   },
 });
