@@ -99,15 +99,14 @@ import { ref, onMounted } from 'vue';
 
 const store = useWorkoutStore();
 const videoStore = useVideoStore();
-const tempStore = useTempWorkoutStore();
 // 
-const name = ref(props.workout.name);
-const intensity = ref(props.workout.intensity); // Default value for intensity
-const musclegroup = ref(props.workout.musclegroup); // Default value for muscle group
-
 
 const dialogState = ref(false); // Local state for dialog visibility
 const refreshKey = ref(0); // Unique key to force re-render
+
+const name = ref(props.workout.name);
+const intensity = ref(props.workout.intensity); // Default value for intensity
+const musclegroup = ref(props.workout.musclegroup); // Default value for muscle group
 
 // Computed property to get the number of cards to render
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
@@ -126,12 +125,22 @@ const refreshList = () => {
 const toggleEdit = () => {
   videoStore.$reset()
   videoStore.video = props.workout.contents;
+  name.value = props.workout.name;  // Reset fields
+  intensity.value = props.workout.intensity;
+  musclegroup.value = [...props.workout.musclegroup];
+
   dialogState.value = true;
 };
 
-const updateWorkout = () => {
-  store.updateWorkout(props.workout.id, name.value, videoStore.video, intensity.value, musclegroup.value)
+const updateWorkout = async () => {
+  try {
+    await store.updateWorkout(props.workout.id, name.value, videoStore.video, intensity.value, musclegroup.value);
+    dialogState.value = false;
+  } catch (error) {
+    console.error('Failed to update workout:', error);
+  }
 };
+
 
 
 function handlePlay(workout: object) {
