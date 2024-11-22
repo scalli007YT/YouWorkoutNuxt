@@ -77,13 +77,12 @@
       <v-divider></v-divider>
 
       <v-card-actions>
+        <v-btn text="Delete" variant="plain" @click="handleDelete"></v-btn>
         <v-btn text="Cancel" variant="plain" @click="dialogState = false"></v-btn>
         <v-btn color="primary" text="Save" variant="tonal" @click="updateWorkout"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-
 
 </template>
 
@@ -94,6 +93,7 @@ const props = defineProps({
   workout: { type: Object, required: true },
 });
 
+const workout = props.workout
 import { ref, onMounted } from 'vue';
 
 
@@ -104,17 +104,16 @@ const videoStore = useVideoStore();
 const dialogState = ref(false); // Local state for dialog visibility
 const refreshKey = ref(0); // Unique key to force re-render
 
-const name = ref(props.workout.name);
-const intensity = ref(props.workout.intensity); // Default value for intensity
-const musclegroup = ref(props.workout.musclegroup); // Default value for muscle group
+const name = ref(workout.name);
+const intensity = ref(workout.intensity); // Default value for intensity
+const musclegroup = ref(workout.musclegroup); // Default value for muscle group
 
 // Computed property to get the number of cards to render
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
 // Watch for changes in card_amount and trigger necessary updates
-watch(card_amount, (newCount) => {
+watch(card_amount, () => {
   refreshList();
-
 });
 
 // Function to refresh the list
@@ -122,19 +121,22 @@ const refreshList = () => {
   refreshKey.value++;
 };
 
+// Function to Delete the Workout
+const handleDelete = () => {
+};
+
 const toggleEdit = () => {
-  videoStore.$reset()
-  videoStore.video = props.workout.contents;
-  name.value = props.workout.name;  // Reset fields
-  intensity.value = props.workout.intensity;
-  musclegroup.value = [...props.workout.musclegroup];
+  videoStore.video = workout.contents;
+  name.value = workout.name;  // Reset fields
+  intensity.value = workout.intensity;
+  musclegroup.value = [...workout.musclegroup];
 
   dialogState.value = true;
 };
 
 const updateWorkout = async () => {
   try {
-    await store.updateWorkout(props.workout.id, name.value, videoStore.video, intensity.value, musclegroup.value);
+    await store.updateWorkout(workout.id, name.value, videoStore.video, intensity.value, musclegroup.value);
     dialogState.value = false;
   } catch (error) {
     console.error('Failed to update workout:', error);

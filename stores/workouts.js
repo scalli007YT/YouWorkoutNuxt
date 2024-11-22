@@ -78,9 +78,11 @@ export const useWorkoutStore = defineStore("workoutStore", {
         ...doc.data(),
       }));
 
-      // Push the fetched workouts to the Pinia store
-      this.workouts.push(...fetchedWorkouts);
+      // Clear the current workouts in the store
+      // this.workouts = [];
 
+      // Add the fetched workouts to the Pinia store
+      this.workouts.push(...fetchedWorkouts);
       return fetchedWorkouts;
     },
   },
