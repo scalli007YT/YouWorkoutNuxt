@@ -1,7 +1,6 @@
 <template>
   <v-card flat class="border-solid rounded-xl pa-5" style="border-width: 1px; font-size: 1.5em;">
     <v-row align="center" justify="space-between">
-      <!-- Left Section: Title, Intensity, and Muscle Groups -->
       <v-col>
         <v-row>
           <v-card-title class="pa-3">{{ workout?.name }}</v-card-title>
@@ -20,14 +19,11 @@
               <v-tooltip activator="parent" location="right">{{ workout?.musclegroup.join(', ') }}</v-tooltip>
             </v-chip>
             <v-divider vertical inset class="mx-1"></v-divider>
-            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large">
-              {{ workout?.completions }}
-            </v-chip>
+            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large">{{ workout?.completions }}</v-chip>
           </v-card-subtitle>
         </v-row>
       </v-col>
 
-      <!-- Right Section: Action Buttons -->
       <v-col>
         <v-row class="justify-end">
           <v-chip elevation="8" size="normal" variant="text">
@@ -44,14 +40,11 @@
     </v-row>
   </v-card>
 
-
-
   <v-dialog v-model="dialogState">
     <v-card prepend-icon="mdi-pencil" append-icon="mdi-pencil" title="Edit Workout"
       class="mx-auto pa-3 rounded-xl text-center text-base" style="max-width: 36em;">
       <v-divider></v-divider>
 
-      <!-- Dynamic list of ItemCard components with dynamic key -->
       <v-list :key="refreshKey" class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
         <v-list-item v-for="index in card_amount" :key="index" class="pa-1">
           <ItemCard :index="index" />
@@ -83,74 +76,60 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 </template>
-
 
 <script lang="ts" setup>
 const props = defineProps({
-  index: { type: Number, required: true },
   workout: { type: Object, required: true },
 });
 
-const workout = props.workout
-import { ref, onMounted } from 'vue';
-
-
 const store = useWorkoutStore();
 const videoStore = useVideoStore();
-// 
 
-const dialogState = ref(false); // Local state for dialog visibility
-const refreshKey = ref(0); // Unique key to force re-render
+const dialogState = ref(false);
+const refreshKey = ref(0);
 
-const name = ref(workout.name);
-const intensity = ref(workout.intensity); // Default value for intensity
-const musclegroup = ref(workout.musclegroup); // Default value for muscle group
+const name = ref(props.workout.name);
+const intensity = ref(props.workout.intensity);
+const musclegroup = ref(props.workout.musclegroup);
 
-// Computed property to get the number of cards to render
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
-// Watch for changes in card_amount and trigger necessary updates
-watch(card_amount, () => {
-  refreshList();
+watch(card_amount, () => refreshList());
+
+watch(dialogState, (newValue) => {
+  if (!newValue) {
+    store.updateUserWorkouts(); // Call the function when dialogState is false
+  }
 });
 
-// Function to refresh the list
-const refreshList = () => {
-  refreshKey.value++;
-};
+const refreshList = () => refreshKey.value++;
 
-// Function to Delete the Workout
 const handleDelete = () => {
+  store.deleteWorkout(props.workout.id);
+  dialogState.value = false;
 };
 
 const toggleEdit = () => {
-  videoStore.video = workout.contents;
-  name.value = workout.name;  // Reset fields
-  intensity.value = workout.intensity;
-  musclegroup.value = [...workout.musclegroup];
-
+  videoStore.video = props.workout.contents;
+  name.value = props.workout.name;
+  intensity.value = props.workout.intensity;
+  musclegroup.value = [...props.workout.musclegroup];
   dialogState.value = true;
 };
 
 const updateWorkout = async () => {
   try {
-    await store.updateWorkout(workout.id, name.value, videoStore.video, intensity.value, musclegroup.value);
+    await store.updateWorkout(props.workout.id, name.value, videoStore.video, intensity.value, musclegroup.value);
     dialogState.value = false;
   } catch (error) {
     console.error('Failed to update workout:', error);
   }
 };
 
-
-
 function handlePlay(workout: object) {
   console.log('Play button clicked!', workout);
 }
-
-
 </script>
-
 
 <style scoped></style>
