@@ -11,7 +11,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-list class="pa-0">
+  <v-list class="pa-0 max-h-[33em] overflow-y-auto custom-scrollbar">
     <!-- Display skeleton that mimics the list item structure -->
     <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
 
@@ -21,3 +21,23 @@ onMounted(async () => {
     </v-list-item>
   </v-list>
 </template>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  /* Set the width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  /* Set the color of the scrollbar thumb */
+  border-radius: 4px;
+  /* Round the edges of the scrollbar thumb */
+}
+
+
+.custom-scrollbar::-webkit-scrollbar-track:hover {
+  background: transparent;
+  /* Keep the track background invisible on hover */
+}
+</style>
