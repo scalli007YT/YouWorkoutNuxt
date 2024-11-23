@@ -2,19 +2,26 @@
     <v-btn text v-if="data">
         <span style="margin-right: 0.5em;">{{ data.user.name }}</span>
         <v-avatar size="32">
-            <img :src="data.user.image" style="width: 100%; height: 100%; object-fit: cover;" />
+            <img :src="data.user.image" style="width: 100%; height: 100%; object-fit: cover;"
+                @error="imageLoadFailed = true" v-if="!imageLoadFailed" />
+            <!-- Display mdi-account icon when image fails -->
+            <v-icon v-if="imageLoadFailed" size="x-large">mdi-account</v-icon>
         </v-avatar>
     </v-btn>
 
-    <v-btn icon>
-        <v-icon @click="signOut()" v-if="data">mdi-logout</v-icon>
+    <v-btn icon v-if="data">
+        <v-icon @click="signOut()">mdi-logout</v-icon>
         <v-tooltip activator="parent" location="bottom">Logout</v-tooltip>
     </v-btn>
-
 </template>
-<script setup>
-const { data, signOut } = useAuth()
 
+<script setup>
+import { ref } from 'vue';
+const { data, signOut } = useAuth();
+console.log(data)
+
+// Track if the image load fails
+const imageLoadFailed = ref(false);
 </script>
 
 <style scoped>

@@ -5,9 +5,10 @@
 
       <v-spacer v-if="!data"></v-spacer>
 
-      <v-app-bar-title :class="{ 'center-title': !data }" style="margin: 0;">
+      <v-app-bar-title :class="{ 'text-center': !data }" style="margin: 0;">
         YouWorkout
       </v-app-bar-title>
+
 
       <v-spacer></v-spacer>
 
@@ -18,7 +19,7 @@
         </v-btn>
 
         <v-btn icon @click="openSettings">
-          <v-icon>mdi-cogs</v-icon>
+          <v-icon>mdi-cog</v-icon>
           <v-tooltip activator="parent" location="bottom">Open Settings</v-tooltip>
         </v-btn>
 
@@ -29,6 +30,8 @@
     <v-main>
       <NuxtPage />
     </v-main>
+
+
   </v-app>
 </template>
 
@@ -47,17 +50,24 @@ onMounted(() => {
 });
 
 function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
+  theme.global.name.value = theme.global.current.value.dark ? 'workoutLight' : 'workoutDark';
 }
 
 function openSettings() {
   console.log('Opening settings...');
 }
+
+// Computed property to determine the dot color based on the theme
+const dotColor = computed(() => {
+  return theme.global.current.value.dark ? '#161616' : '#B3B3B3'; // dark theme: dark color, light theme: light color
+});
+
 </script>
 
 <style scoped>
-.center-title {
-  text-align: center;
-  width: 100%;
+.v-application {
+  background: radial-gradient(circle, rgba(var(--v-theme-dots)) 10%, transparent 10%);
+  background-position: 0 0;
+  background-size: 20px 20px;
 }
 </style>

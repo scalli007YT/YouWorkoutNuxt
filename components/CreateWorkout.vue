@@ -1,5 +1,5 @@
 <template>
-  <v-card flat append-icon="mdi-plus" class="border-dashed rounded-xl pa-1" style="border-width: 3px; font-size: 1.5em;"
+  <v-card flat append-icon="mdi-plus" class="border-dashed rounded-xl pa-1" style="border-width: 2px; font-size: 1.5em;"
     subtitle="No Workout found in library" title="Create New Workout" @click="handleDialog">
   </v-card>
 

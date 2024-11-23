@@ -19,6 +19,10 @@ export default defineNuxtConfig({
       authSecret: process.env.NUXT_AUTH_SECRET,
       githubClientId: process.env.NUXT_GITHUB_CLIENT_ID,
       githubClientSecret: process.env.NUXT_GITHUB_CLIENT_SECRET,
+      googleClientId: process.env.NUXT_GOOGLE_CLIENT_ID,
+      googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
+      twitchClientId: process.env.NUXT_TWITCH_CLIENT_ID,
+      twitchClientSecret: process.env.NUXT_TWITCH_CLIENT_SECRET,
     }
   },
 
