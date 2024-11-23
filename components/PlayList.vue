@@ -1,11 +1,23 @@
 <script lang="ts" setup>
 import { onMounted, ref, computed, watch } from 'vue';
+
+// Define the type for a workout
+interface Workout {
+  id: string;  // Adjust the type according to your data
+  name: string;  // Adjust the type according to your data
+}
+
 const store = useWorkoutStore();
+
+// Explicitly type the workouts array
+const workouts = ref<Workout[]>([]);
+
 const loading = ref(true);
 
 // Automatically fetch workouts when the module is loaded
 onMounted(async () => {
   await store.updateUserWorkouts();
+  workouts.value = store.workouts;  // Assign the fetched workouts
   loading.value = false;
 });
 
@@ -17,7 +29,7 @@ const filter = useState('filter', () => {
 // Computed property to filter workouts based on play_name
 const filteredWorkouts = computed(() => {
   // If play_name is empty, return all workouts, otherwise filter by startsWith
-  return store.workouts.filter((workout) =>
+  return workouts.value.filter((workout) =>
     filter.value === "" || workout.name.startsWith(filter.value)
   );
 });
