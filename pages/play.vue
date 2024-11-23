@@ -4,7 +4,8 @@
       <v-stepper flat :items="['Select', 'Settings', 'Start']">
 
         <template v-slot:item.1>
-          <WorkoutList />
+          <ListSearch />
+          <PlayList />
         </template>
 
         <template v-slot:item.2>

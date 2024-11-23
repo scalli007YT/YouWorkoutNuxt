@@ -1,9 +1,9 @@
 <template>
-  <v-card flat class="border-solid rounded-xl pa-5" style="border-width: 1px; font-size: 1.5em;">
+  <v-card flat class="border-solid rounded-xl pa-8" style="border-width: 1px; font-size: 1.5em;">
     <v-row align="center" justify="space-between">
       <v-col>
         <v-row>
-          <v-card-title class="pa-3">{{ workout?.name }}</v-card-title>
+          <v-card-title class="pa-3 pt-0">{{ workout?.name }}</v-card-title>
         </v-row>
         <v-row>
           <v-card-subtitle class="pa-0">
