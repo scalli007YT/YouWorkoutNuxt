@@ -14,7 +14,7 @@
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-xl font-bold w-44">Completed</div>
+                                <div class="text-xl font-bold min-w-28">Completed</div>
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
@@ -32,11 +32,11 @@
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-xl font-bold w-44">Loaded</div>
+                                <div class="text-xl font-bold min-w-28">Loaded</div>
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-3xl font-bold">{{ store.workouts.length || "◐" }}</div>
+                                <div class="text-3xl font-bold">{{ store.workouts.length || 0 }}</div>
                             </v-col>
                         </v-row>
                     </v-card>
@@ -50,7 +50,7 @@
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-xl font-bold w-44">Start</div>
+                                <div class="text-xl font-bold min-w-28">Start</div>
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
@@ -69,7 +69,7 @@
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-xl font-bold w-44">Library</div>
+                                <div class="text-xl font-bold min-w-28">Library</div>
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">

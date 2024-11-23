@@ -43,6 +43,7 @@
   <v-dialog v-model="dialogState">
     <v-card prepend-icon="mdi-pencil" append-icon="mdi-pencil" title="Edit Workout"
       class="mx-auto pa-3 rounded-xl text-center text-base" style="max-width: 36em;">
+
       <v-divider></v-divider>
 
       <v-list :key="refreshKey" class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
