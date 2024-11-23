@@ -1,23 +1,35 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 const store = useWorkoutStore();
-const loading = ref(true); // Add a loading state to track whether data is still being fetched
+const loading = ref(true);
 
 // Automatically fetch workouts when the module is loaded
 onMounted(async () => {
-  await store.updateUserWorkouts();  // Wait for the workout data to load
-  loading.value = false; // Set loading to false once data is fetched
+  await store.updateUserWorkouts();
+  loading.value = false;
+});
+
+// Define a filter state, initialized with the value from localStorage or fallback to "123"
+const filter = useState('filter', () => {
+  return localStorage.getItem('filter') || ''; // Default to "" if not set
+});
+
+// Computed property to filter workouts based on play_name
+const filteredWorkouts = computed(() => {
+  // If play_name is empty, return all workouts, otherwise filter by startsWith
+  return store.workouts.filter((workout) =>
+    filter.value === "" || workout.name.startsWith(filter.value)
+  );
 });
 </script>
 
 <template>
   <v-list class="pa-0 max-h-[25em] overflow-y-auto custom-scrollbar">
-    <!-- Display skeleton that mimics the list item structure -->
     <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
 
-    <!-- Loop through workouts and display each one inside a v-card -->
-    <v-list-item v-for="(workout, index) in store.workouts" :key="workout" class="pa-0 my-2" v-if="!loading">
-      <PlayListItem index="index" :workout="workout" />
+    <!-- Loop through filtered workouts based on play_name -->
+    <v-list-item v-for="(workout) in filteredWorkouts" :key="workout.id" class="pa-0 my-2">
+      <PlayListItem :workout="workout" />
     </v-list-item>
   </v-list>
 </template>
@@ -25,19 +37,14 @@ onMounted(async () => {
 <style>
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
-  /* Set the width of the scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #888;
-  /* Set the color of the scrollbar thumb */
   border-radius: 4px;
-  /* Round the edges of the scrollbar thumb */
 }
-
 
 .custom-scrollbar::-webkit-scrollbar-track:hover {
   background: transparent;
-  /* Keep the track background invisible on hover */
 }
 </style>
