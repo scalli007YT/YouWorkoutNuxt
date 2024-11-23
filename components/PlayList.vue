@@ -24,7 +24,9 @@ const filteredWorkouts = computed(() => {
 </script>
 
 <template>
-  <v-list class="pa-0 max-h-[25em] overflow-y-auto custom-scrollbar">
+  <ListSearch />
+
+  <v-list class="pa-0 max-h-[26em] overflow-y-auto custom-scrollbar">
     <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
 
     <!-- Loop through filtered workouts based on play_name -->
@@ -32,6 +34,7 @@ const filteredWorkouts = computed(() => {
       <PlayListItem :workout="workout" />
     </v-list-item>
   </v-list>
+
 </template>
 
 <style>

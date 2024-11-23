@@ -23,12 +23,13 @@
           <v-text-field label="Name*" variant="solo" v-model="name"></v-text-field>
         </v-row>
         <v-row dense>
-          <v-select label="Muscle Group*" :items="['Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']" variant="solo"
-            v-model="musclegroup" chips multiple>
+          <v-select label="Muscle Group*" :items="['HIIT', 'Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']"
+            variant="solo" v-model="musclegroup" chips multiple>
           </v-select>
         </v-row>
         <v-row dense>
-          <v-select label="Intensity" :items="['Low', 'Medium', 'High']" variant="solo" v-model="intensity"></v-select>
+          <v-select label="Intensity" :items="['Low', 'Medium', 'doable', 'High']" variant="solo"
+            v-model="intensity"></v-select>
         </v-row>
       </v-card-text>
 

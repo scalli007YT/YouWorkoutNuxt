@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app elevation="15" height="48">
-      <v-app-bar-nav-icon v-if="isClient && data" @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-if="isClient && data" @click="drawer = !drawer" disabled></v-app-bar-nav-icon>
 
       <v-spacer v-if="!data"></v-spacer>
 
