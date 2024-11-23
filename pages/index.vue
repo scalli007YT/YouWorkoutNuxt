@@ -5,7 +5,7 @@
 
             <!-- Grid layout for cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                <!-- Card 2 -->
+                <!-- Card 1 -->
                 <v-container class="pa-0">
                     <v-card flat class="mx-auto pa-5 rounded-xl border flex flex-col h-full min-w-full">
                         <v-row align="center" class="flex-grow">
@@ -23,7 +23,7 @@
                         </v-row>
                     </v-card>
                 </v-container>
-                <!-- Card 1 -->
+                <!-- Card 2 -->
                 <v-container class="pa-0">
                     <v-card flat class="mx-auto pa-5 rounded-xl border flex flex-col h-full min-w-full">
                         <v-row align="center" class="flex-grow">
@@ -36,7 +36,7 @@
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-3xl font-bold">0</div>
+                                <div class="text-3xl font-bold">{{ store.workouts.length || "◐" }}</div>
                             </v-col>
                         </v-row>
                     </v-card>
@@ -88,6 +88,14 @@
 definePageMeta({
     middleware: 'auth'
 })
+
+const store = useWorkoutStore();
+
+// Automatically fetch workouts when the module is loaded
+onMounted(async () => {
+    await store.updateUserWorkouts();  // Wait for the workout data to load
+});
+
 
 const handleStart = () => {
     console.log('Start');

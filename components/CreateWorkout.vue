@@ -35,9 +35,14 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn text="Cancel" variant="plain" @click="dialog = false"></v-btn>
-        <v-btn color="primary" text="Save" variant="tonal" @click="handleSubmit"></v-btn>
-        <!-- Call handleSubmit here -->
+        <v-row>
+          <v-col class="text-left">
+            <v-btn text="Cancel" variant="plain" @click="dialog = false"></v-btn>
+          </v-col>
+          <v-col class="text-right">
+            <v-btn color="primary" text="Save" variant="outlined" @click="handleSubmit"></v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
