@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card elevation="8" class="mx-auto pa-6 max-w-full rounded-xl border">
+    <v-card elevation="8" class="mx-auto pa-6 max-w-2xl rounded-xl border">
       <v-stepper flat :items="['Select', 'Settings', 'Start']">
 
         <template v-slot:item.1>

@@ -7,12 +7,12 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-select label="Intensity" :items="['Low', 'Medium', 'doable', 'High']" variant="underlined" chips multiple
-          clearable></v-select>
+        <v-select label="Intensity" :items="['Low', 'Medium', 'doable', 'High']" variant="underlined"
+          v-model="Intensityfilter" chips multiple clearable></v-select>
       </v-col>
       <v-col>
         <v-select label="Group" :items="['HIIT', 'Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']"
-          variant="underlined" chips multiple clearable></v-select>
+          variant="underlined" chips multiple clearable v-model="Groupfilter"></v-select>
       </v-col>
     </v-row>
   </v-card>
@@ -20,18 +20,30 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue';
-// Clear `filter` from localStorage when the component is loaded
+
+// Utility function to handle state and localStorage sync
+function useLocalStorageState(key: string, defaultValue: any) {
+  const state = useState(key, () => {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : defaultValue;
+  });
+
+  watch(state, (newValue) => {
+    localStorage.setItem(key, JSON.stringify(newValue));
+  });
+
+  return state;
+}
+
+// Clear all relevant localStorage items on load
 localStorage.removeItem('filter');
+localStorage.removeItem('Intensityfilter');
+localStorage.removeItem('Groupfilter');
 
-// Define a `filter` state, initialized with the value from `localStorage` or fallback to ""
-const filter = useState('filter', () => {
-  return localStorage.getItem('filter') || ''; // Default to an empty string if not set
-});
-
-// Watch for changes in `filter` and update `localStorage` when the value changes
-watch(filter, (newValue) => {
-  localStorage.setItem('filter', newValue);
-});
+// Initialize states using the utility function
+const filter = useLocalStorageState('filter', '');
+const Intensityfilter = useLocalStorageState('Intensityfilter', []);
+const Groupfilter = useLocalStorageState('Groupfilter', []);
 </script>
 
 <style scoped>
