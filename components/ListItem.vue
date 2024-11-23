@@ -70,9 +70,15 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn text="Delete" variant="plain" @click="handleDelete"></v-btn>
-        <v-btn text="Cancel" variant="plain" @click="dialogState = false"></v-btn>
-        <v-btn color="primary" text="Save" variant="tonal" @click="updateWorkout"></v-btn>
+        <v-row>
+          <v-col class="text-left">
+            <v-btn color="attention" text="Cancel" @click="dialogState = false"></v-btn>
+            <v-btn text="Delete" @click="handleDelete"></v-btn>
+          </v-col>
+          <v-col class="text-right">
+            <v-btn text="Save" @click="updateWorkout"></v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>

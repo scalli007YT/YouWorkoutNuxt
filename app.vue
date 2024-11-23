@@ -6,7 +6,7 @@
       <v-spacer v-if="!data"></v-spacer>
 
       <v-app-bar-title :class="{ 'text-center': !data }" style="margin: 0;">
-        YouWorkout
+        <NuxtLink to="/">YouWorkout</NuxtLink>
       </v-app-bar-title>
 
 
