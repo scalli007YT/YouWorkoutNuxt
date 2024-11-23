@@ -43,7 +43,7 @@
                 </v-container>
                 <!-- Card 3 with @click event -->
                 <v-container class="hover:scale-105 transition-transform duration-300 ease-in-out pa-0">
-                    <v-card flat class=" mx-auto pa-5 rounded-xl border flex flex-col h-full min-w-full" to="/startup">
+                    <v-card flat class=" mx-auto pa-5 rounded-xl border flex flex-col h-full min-w-full" to="/play">
                         <v-row align="center" class="flex-grow">
                             <v-col class="text-center">
                                 <v-icon size="x-large">mdi-play</v-icon>
