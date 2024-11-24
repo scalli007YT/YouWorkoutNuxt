@@ -33,8 +33,7 @@
                 @click="step = 2"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Continue" :disabled="!playStore.selected" variant="outlined"
-                @click=""></v-btn>
+              <v-btn color="primary" text="Start" :disabled="!playStore.selected" variant="outlined" @click=""></v-btn>
             </v-col>
           </v-row>
         </template>
