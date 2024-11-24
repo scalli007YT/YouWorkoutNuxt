@@ -1,6 +1,6 @@
 <template>
-  <v-card flat @click="handlePlay(workout)" class="border-dotted rounded-xl pa-4 transition-all duration-300"
-    :style="{ borderWidth: currentWorkoutId === props.workout.id ? '3px' : '1px', fontSize: '1.5em' }">
+  <v-card flat @click="handlePlay(workout)" class="border-solid rounded-xl pa-4 transition-all duration-300"
+    :style="{ borderWidth: currentWorkoutId === props.workout.id ? '2px' : '1px', fontSize: '1.5em' }">
     <v-row align="center" justify="space-between" class="w-full">
       <!-- Left Column: Workout Name, Thumbnails, and Info -->
       <v-col cols="12" sm="12" class="flex flex-col">

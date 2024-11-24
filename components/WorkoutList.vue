@@ -13,10 +13,10 @@ onMounted(async () => {
 <template>
   <v-list class="pa-0 max-h-[33em] overflow-y-auto custom-scrollbar">
     <!-- Display skeleton that mimics the list item structure -->
-    <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
+    <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-4" :loading="loading" />
 
     <!-- Loop through workouts and display each one inside a v-card -->
-    <v-list-item v-for="(workout) in store.workouts" :key="workout" class="pa-0 my-2" v-if="!loading">
+    <v-list-item v-for="(workout) in store.workouts" :key="workout" class="pa-0 my-6" v-if="!loading">
       <ListItem :workout="workout" />
     </v-list-item>
   </v-list>
