@@ -2,8 +2,9 @@
   <v-card flat class="border-solid rounded-xl pa-8" style="border-width: 1px; font-size: 1.5em;">
     <v-row align="center" justify="space-between">
       <v-col>
+        <!-- Adjusting the layout of the title and subtitle -->
         <v-row>
-          <v-card-title class="pa-3 pt-0">{{ workout?.name }}</v-card-title>
+          <v-card-title class="pa-3 pt-0" style="white-space: normal;">{{ workout?.name }}</v-card-title>
         </v-row>
         <v-row>
           <v-card-subtitle class="pa-0">
@@ -84,7 +85,6 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 </template>
 
 <script lang="ts" setup>
@@ -108,7 +108,7 @@ watch(card_amount, () => refreshList());
 
 watch(dialogState, (newValue) => {
   if (!newValue) {
-    store.updateUserWorkouts(); // Call the function when dialogState is false
+    store.updateUserWorkouts();
   }
 });
 
@@ -141,4 +141,10 @@ function handlePlay(workout: object) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Ensure proper wrapping of workout name */
+.v-card-title {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+</style>

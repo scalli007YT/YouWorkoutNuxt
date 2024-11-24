@@ -36,9 +36,10 @@ watch([filter, Intensityfilter, Groupfilter], () => {
 
 // Compact filter function for workouts
 const filterWorkouts = (workout: Workout) =>
-  (!filter.value || workout.name.startsWith(filter.value)) &&
+  (!filter.value || workout.name.toLowerCase().startsWith(filter.value.toLowerCase())) &&
   (!Intensityfilter.value.length || Intensityfilter.value.includes(workout.intensity)) &&
   (!Groupfilter.value.length || workout.musclegroup.some(group => Groupfilter.value.includes(group)));
+
 
 // Computed property to filter workouts
 const filteredWorkouts = computed(() => workouts.value.filter(filterWorkouts));
