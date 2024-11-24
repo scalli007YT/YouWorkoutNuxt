@@ -5,7 +5,7 @@ export const usePlayStore = defineStore("playStore", {
   state: () => ({
     currentWorkout: null, // Holds the single workout
     selected: false,
-    insta_start: false,
+    muted: true,
   }),
   actions: {
     // Load a specific workout from Firestore into the store

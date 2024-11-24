@@ -12,8 +12,18 @@
           </v-row>
         </template>
 
-
         <template v-slot:item.2>
+          <v-card flat>
+            <v-row class="pa-2">
+              <v-col cols="6" class="flex items-center justify-start">
+                <span class="text-left text-xl font-sans">Start Muted</span>
+              </v-col>
+              <v-col cols="6" class="flex items-center justify-end">
+                <v-switch color="primary" v-model="playStore.muted" hide-details />
+              </v-col>
+            </v-row>
+          </v-card>
+
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
@@ -27,13 +37,22 @@
         </template>
 
         <template v-slot:item.3>
+          <v-card flat>
+            <v-row class="pa-0" align="center" justify="center">
+              <v-col class="text-center">
+                <span class="text-h5">Start Workout?</span>
+              </v-col>
+            </v-row>
+          </v-card>
+
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
                 @click="step = 2"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Start" :disabled="!playStore.selected" variant="outlined" @click=""></v-btn>
+              <v-btn color="primary" text="Start" :disabled="!playStore.selected" variant="outlined"
+                @click="startProcess"></v-btn>
             </v-col>
           </v-row>
         </template>

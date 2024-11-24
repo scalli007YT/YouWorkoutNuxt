@@ -35,17 +35,8 @@ function useLocalStorageState(key: string, defaultValue: any) {
   return state;
 }
 
-// Clear all relevant localStorage items on load
-localStorage.removeItem('filter');
-localStorage.removeItem('Intensityfilter');
-localStorage.removeItem('Groupfilter');
-
 // Initialize states using the utility function
 const filter = useLocalStorageState('filter', '');
 const Intensityfilter = useLocalStorageState('Intensityfilter', []);
 const Groupfilter = useLocalStorageState('Groupfilter', []);
 </script>
-
-<style scoped>
-/* Optional: Customize styling if needed */
-</style>
