@@ -1,48 +1,46 @@
 <script lang="ts" setup>
-import { onMounted, ref, computed, watch } from 'vue';
+import { onMounted, ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
 
-// Define the type for a workout
+// Access stores
+const workoutStore = useWorkoutStore();  // Manages workout data
+const playStore = usePlayStore();        // Manages filter data
+
+// Destructure state from Pinia stores
+const { workouts } = storeToRefs(workoutStore);  // Access workouts state
+const { filter } = storeToRefs(playStore);       // Access filters from playStore
+
+// Loading state
+const loading = ref<boolean>(true);  // Local loading state
+
+// Define the type for a Workout
 interface Workout {
   id: string;
   name: string;
   intensity: string;
-  musclegroup: string[];  // Array of muscle groups
+  musclegroup: string[];
 }
-
-const store = useWorkoutStore();
-
-// Workouts array and loading state
-const workouts = ref<Workout[]>([]);
-const loading = ref(true);
 
 // Automatically fetch workouts when the module is loaded
 onMounted(async () => {
-  await store.updateUserWorkouts();
-  workouts.value = store.workouts;
+  loading.value = true;
+  await workoutStore.updateUserWorkouts();  // Fetch workouts from the store
   loading.value = false;
 });
 
-// Define filter states with default values
-const filter = useState('filter', () => localStorage.getItem('filter') || '');
-const Intensityfilter = useState('Intensityfilter', () => JSON.parse(localStorage.getItem('Intensityfilter') || '[]'));
-const Groupfilter = useState('Groupfilter', () => JSON.parse(localStorage.getItem('Groupfilter') || '[]'));
+// Computed properties bound to the Pinia store
+const searchFilter = computed<string>(() => filter.value.search);
+const intensityFilter = computed<string[]>(() => filter.value.intensity);
+const groupFilter = computed<string[]>(() => filter.value.group);
 
-// Watch for changes in filters and update localStorage
-watch([filter, Intensityfilter, Groupfilter], () => {
-  localStorage.setItem('filter', filter.value);
-  localStorage.setItem('Intensityfilter', JSON.stringify(Intensityfilter.value));
-  localStorage.setItem('Groupfilter', JSON.stringify(Groupfilter.value));
-}, { deep: true });
-
-// Compact filter function for workouts
+// Filter function for workouts
 const filterWorkouts = (workout: Workout) =>
-  (!filter.value || workout.name.toLowerCase().startsWith(filter.value.toLowerCase())) &&
-  (!Intensityfilter.value.length || Intensityfilter.value.includes(workout.intensity)) &&
-  (!Groupfilter.value.length || workout.musclegroup.some(group => Groupfilter.value.includes(group)));
+  (!searchFilter.value || workout.name.toLowerCase().startsWith(searchFilter.value.toLowerCase())) &&
+  (!intensityFilter.value.length || intensityFilter.value.includes(workout.intensity)) &&
+  (!groupFilter.value.length || workout.musclegroup.some(group => groupFilter.value.includes(group)));
 
-
-// Computed property to filter workouts
-const filteredWorkouts = computed(() => workouts.value.filter(filterWorkouts));
+// Computed property for filtered workouts
+const filteredWorkouts = computed<Workout[]>(() => workouts.value.filter(filterWorkouts));
 </script>
 
 <template>
@@ -52,7 +50,7 @@ const filteredWorkouts = computed(() => workouts.value.filter(filterWorkouts));
     <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
 
     <!-- Loop through filtered workouts -->
-    <v-list-item v-for="(workout) in filteredWorkouts" :key="workout.id" class="pa-0 my-2">
+    <v-list-item v-else v-for="(workout) in filteredWorkouts" :key="workout.id" class="pa-0 my-2">
       <PlayListItem :workout="workout" />
     </v-list-item>
   </v-list>

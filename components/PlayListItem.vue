@@ -65,7 +65,6 @@ const props = defineProps({
 });
 
 const playStore = usePlayStore();
-playStore.$reset()
 const currentWorkoutId = ref<string | null>(null); // Ref variable to store the current workout ID
 
 // Length calculation
