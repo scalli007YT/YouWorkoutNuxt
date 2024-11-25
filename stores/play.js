@@ -3,6 +3,11 @@ import { collection, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
 
 export const usePlayStore = defineStore("playStore", {
   state: () => ({
+    filter: {
+      search: "",
+      intensity: [],
+      group: [],
+    },
     currentWorkout: null, // Holds the single workout
     selected: false,
     muted: true,

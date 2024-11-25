@@ -1,42 +1,48 @@
 <template>
   <v-card flat class="border-solid rounded-xl pa-8" style="border-width: 1px; font-size: 1.5em;">
     <v-row align="center" justify="space-between">
-      <!-- Bind the input field to `filter` -->
       <v-text-field class="mx-auto -mb-5" density="comfortable" placeholder="Search Workouts"
-        prepend-inner-icon="mdi-magnify" flat variant="solo" v-model="filter"></v-text-field>
+        prepend-inner-icon="mdi-magnify" flat variant="solo" v-model="searchFilter">
+      </v-text-field>
     </v-row>
     <v-row>
       <v-col>
-        <v-select label="Intensity" :items="['Low', 'Medium', 'doable', 'High']" variant="underlined"
-          v-model="Intensityfilter" chips multiple clearable></v-select>
+        <v-select label="Intensity" :items="['Low', 'Medium', 'Doable', 'High']" variant="underlined" chips multiple
+          clearable v-model="intensityFilter">
+        </v-select>
       </v-col>
       <v-col>
         <v-select label="Group" :items="['HIIT', 'Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']"
-          variant="underlined" chips multiple clearable v-model="Groupfilter"></v-select>
+          variant="underlined" chips multiple clearable v-model="groupFilter">
+        </v-select>
       </v-col>
     </v-row>
   </v-card>
 </template>
 
+
 <script lang="ts" setup>
-import { watch } from 'vue';
+import { storeToRefs } from 'pinia';
 
-// Utility function to handle state and localStorage sync
-function useLocalStorageState(key: string, defaultValue: any) {
-  const state = useState(key, () => {
-    const storedValue = localStorage.getItem(key);
-    return storedValue ? JSON.parse(storedValue) : defaultValue;
-  });
+// Access the Pinia store
+const playStore = usePlayStore();
 
-  watch(state, (newValue) => {
-    localStorage.setItem(key, JSON.stringify(newValue));
-  });
+// Use `storeToRefs` to get reactive references to the state
+const { filter } = storeToRefs(playStore);
 
-  return state;
-}
+// Create computed properties to bind Vue inputs to the Pinia store
+const searchFilter = computed({
+  get: () => filter.value.search,
+  set: (value) => filter.value.search = value
+});
 
-// Initialize states using the utility function
-const filter = useLocalStorageState('filter', '');
-const Intensityfilter = useLocalStorageState('Intensityfilter', []);
-const Groupfilter = useLocalStorageState('Groupfilter', []);
+const intensityFilter = computed({
+  get: () => filter.value.intensity,
+  set: (value) => filter.value.intensity = value
+});
+
+const groupFilter = computed({
+  get: () => filter.value.group,
+  set: (value) => filter.value.group = value
+});
 </script>
