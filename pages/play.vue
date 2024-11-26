@@ -47,12 +47,20 @@
           </v-card>
 
           <v-timeline side="start" truncate-line="both">
-            <v-timeline-item v-for="item in 4" :key="item.id" :dot-color="item.color" size="small">
+            <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
               <v-card>
-                test
+                <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
               </v-card>
+
+              <!-- Place the button on the opposite side of the timeline item -->
+              <template v-slot:opposite>
+                <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">
+                  Start
+                </v-btn>
+              </template>
             </v-timeline-item>
           </v-timeline>
+
 
           <v-row class="mt-4">
             <v-col class="text-left">
@@ -71,8 +79,6 @@
 </template>
 
 <script lang="ts" setup>
-
-
 import { ref, computed } from 'vue';
 
 const playStore = usePlayStore()
@@ -86,6 +92,12 @@ const startProcess = () => {
   // Logic to start the process
   console.log('Process Started');
 };
+
+const handleButtonClick = (workout) => {
+  console.log('Button clicked for workout:', workout);
+  // Add your custom logic here
+};
+
 
 const settings = [
   { label: 'Start Muted', model: 'muted' },
