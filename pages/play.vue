@@ -1,7 +1,8 @@
 <template>
   <v-container>
-    <v-card elevation="8" class="mx-auto pa-6 max-w-5xl rounded-xl border">
-      <v-stepper v-model="step" hide-actions flat :items="['Select', 'Settings', 'Start']">
+    <v-card elevation="8" class="mx-auto pa-6 rounded-xl border" :class="cardSizeClass"
+      style="transition: max-width 0.3s;">
+      <v-stepper v-model="step" hide-actions flat :items="['Select', 'Settings', 'Workout']">
         <template v-slot:item.1>
           <PlayList />
           <v-row class="mt-4">
@@ -13,8 +14,6 @@
         </template>
 
         <template v-slot:item.2>
-
-
           <v-card flat v-for="(item, index) in settings" :key="index">
             <v-row class="pa-2">
               <v-col cols="6" class="flex items-center justify-start">
@@ -26,14 +25,13 @@
             </v-row>
           </v-card>
 
-
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
                 @click="step = 1"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Continue" :disabled="!playStore.selected" variant="outlined"
+              <v-btn color="primary" text="Start Workout" :disabled="!playStore.selected" variant="outlined"
                 @click="step = 3"></v-btn>
             </v-col>
           </v-row>
@@ -54,7 +52,7 @@
                 @click="step = 2"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Start" :disabled="!playStore.selected" variant="outlined"
+              <v-btn color="primary" text="Finish" :disabled="!playStore.selected" variant="outlined"
                 @click="startProcess"></v-btn>
             </v-col>
           </v-row>
@@ -65,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const playStore = usePlayStore()
 
@@ -83,4 +81,16 @@ const settings = [
   { label: 'Start Muted', model: 'muted' },
   { label: 'Start in fullscreen', model: 'fullscreen' },
 ]
+
+// Dynamically change card size based on the current step
+const cardSizeClass = computed(() => {
+  switch (step.value) {
+    case 1:
+      return 'max-w-3xl'; // For step 1
+    case 2:
+      return 'max-w-xl'; // For step 2
+    case 3:
+      return 'max-w-full'; // For step 3
+  }
+});
 </script>
