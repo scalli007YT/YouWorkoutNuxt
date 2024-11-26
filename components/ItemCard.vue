@@ -171,6 +171,9 @@ const handleShiftLeft = (event: MouseEvent) => {
 const handleShiftRight = (event: MouseEvent) => {
   event.stopPropagation(); // Prevent the card click from triggering
   videoStore.swapVideos(props.index, 1)
+
+
+
 };
 
 // Handle click for deleting video

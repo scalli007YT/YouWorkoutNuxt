@@ -104,7 +104,7 @@ const musclegroup = ref(props.workout.musclegroup);
 
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
-watch(card_amount, () => refreshList());
+watch(videoStore, () => refreshList());
 
 watch(dialogState, (newValue) => {
   if (!newValue) {
