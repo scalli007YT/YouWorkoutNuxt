@@ -68,7 +68,7 @@ const refreshKey = ref(0); // Unique key to force re-render
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
 // Watch for changes in card_amount and trigger necessary updates
-watch(card_amount, (newCount) => {
+watch(videoStore, (newCount) => {
   refreshList()
 });
 // Function to refresh the list
