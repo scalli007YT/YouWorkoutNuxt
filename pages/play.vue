@@ -46,6 +46,14 @@
             </v-row>
           </v-card>
 
+          <v-timeline side="start" truncate-line="both">
+            <v-timeline-item v-for="item in 4" :key="item.id" :dot-color="item.color" size="small">
+              <v-card>
+                test
+              </v-card>
+            </v-timeline-item>
+          </v-timeline>
+
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
@@ -63,6 +71,8 @@
 </template>
 
 <script lang="ts" setup>
+
+
 import { ref, computed } from 'vue';
 
 const playStore = usePlayStore()
