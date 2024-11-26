@@ -11,6 +11,7 @@ export const usePlayStore = defineStore("playStore", {
     currentWorkout: null, // Holds the single workout
     selected: false,
     muted: true,
+    current_tab: 1,
   }),
   actions: {
     // Load a specific workout from Firestore into the store
@@ -28,4 +29,5 @@ export const usePlayStore = defineStore("playStore", {
       }
     },
   },
+  persist: true,
 });

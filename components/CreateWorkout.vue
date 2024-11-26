@@ -4,7 +4,7 @@
   </v-card>
 
   <v-dialog v-model="dialog">
-    <v-card prepend-icon="mdi-pencil" append-icon="mdi-pencil" title="Edit Workout"
+    <v-card prepend-icon="mdi-plus-circle-outline" append-icon="none" title="Create New Workout"
       class="mx-auto pa-3 rounded-xl text-center text-base" style="max-width: 36em;">
 
       <v-divider></v-divider>

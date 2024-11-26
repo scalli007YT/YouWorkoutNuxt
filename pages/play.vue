@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card elevation="8" class="mx-auto pa-6 max-w-2xl rounded-xl border">
+    <v-card elevation="8" class="mx-auto pa-6 max-w-5xl rounded-xl border">
       <v-stepper v-model="step" hide-actions flat :items="['Select', 'Settings', 'Start']">
         <template v-slot:item.1>
           <PlayList />
@@ -63,8 +63,13 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-const step = ref(1);
+
 const playStore = usePlayStore()
+
+const step = computed({
+  get: () => playStore.current_tab,  // Get the current tab value from the store
+  set: (value) => (playStore.current_tab = value), // Update the store state when step changes
+});
 
 const startProcess = () => {
   // Logic to start the process

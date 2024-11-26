@@ -1,16 +1,16 @@
 <template>
   <v-card flat @click="handlePlay(workout)" class="border-solid rounded-xl pa-4 transition-all duration-300"
-    :style="{ borderWidth: currentWorkoutId === props.workout.id ? '2px' : '1px', fontSize: '1.5em' }">
+    :style="{ borderWidth: currentWorkoutId === props.workout.id ? '4px' : '1px', fontSize: '1.5em' }">
     <v-row align="center" justify="space-between" class="w-full">
       <!-- Left Column: Workout Name, Thumbnails, and Info -->
       <v-col cols="12" sm="12" class="flex flex-col">
         <!-- Workout name -->
-        <v-card-title class="pa-3 text-xl font-semibold" style="white-space: normal; overflow-wrap: break-word;">
+        <v-card-title class="pa-3 text-xl font-semibold pb-0" style="white-space: normal; overflow-wrap: break-word;">
           {{ workout?.name }}
         </v-card-title>
 
         <!-- Dynamic list of thumbnails with arrows between them -->
-        <div class="flex items-center overflow-x-auto space-x-2 pa-3 custom-scrollbar">
+        <div class="flex items-center overflow-x-auto space-x-2 custom-scrollbar pl-3">
           <template v-for="(content, index) in workout?.contents" :key="index">
             <v-img :src="content.thumbnail" alt="Thumbnail" min-width="120" max-width="120" class="rounded-lg"></v-img>
             <!-- Arrow between thumbnails (only between items) -->
@@ -19,12 +19,12 @@
         </div>
 
         <!-- Intensity and Muscle Groups -->
-        <v-row class="mt-4">
-          <v-card-subtitle class="pa-3 flex items-center space-x-2">
+        <v-row class="mt-0">
+          <v-card-subtitle class="pa-6 flex items-center space-x-2 pt-2">
 
             <v-chip prepend-icon="mdi-arm-flex" variant="outlined" size="large">{{ workout?.intensity }}</v-chip>
 
-            <v-chip variant="outlined" size="large" class="pa-2">
+            <v-chip variant="outlined" size="large" class="pa-4">
               <v-icon>mdi-target</v-icon>
               <div class="flex items-center space-x-1">
                 <v-chip v-for="(group, index) in workout?.musclegroup.slice(0, 2)" :key="index" variant="text"

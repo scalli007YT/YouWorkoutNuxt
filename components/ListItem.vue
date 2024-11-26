@@ -42,7 +42,7 @@
   </v-card>
 
   <v-dialog v-model="dialogState">
-    <v-card prepend-icon="mdi-pencil" append-icon="mdi-pencil" title="Edit Workout"
+    <v-card prepend-icon="mdi-puzzle-edit-outline" append-icon="none" title="Edit Workout"
       class="mx-auto pa-3 rounded-xl text-center text-base" style="max-width: 36em;">
 
       <v-divider></v-divider>

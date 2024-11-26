@@ -19,16 +19,24 @@
           <!-- Overlay with text -->
           <div class="absolute inset-0 flex items-center justify-center rounded-xl"
             style="background-color: rgba(var(--v-theme-background), 0.6)">
-            <v-card-text class="whitespace-normal">
-              {{ truncatedTitle }}
-            </v-card-text>
+            <v-card-text class="whitespace-normal text-center">{{ truncatedTitle }}</v-card-text>
           </div>
+
+          <!-- Buttons overlay container -->
+          <div class="absolute bottom-0 w-full flex justify-between px-0">
+            <!-- Conditionally set the icon based on props.index -->
+            <v-btn variant="plain" class="rounded-full" @click="handleShiftLeft($event)"
+              :icon="props.index !== 1 ? 'mdi-page-first' : 'none'" />
+            <!-- Right button -->
+            <v-btn variant="plain" class="rounded-full" @click="handleShiftRight($event)"
+              :icon="props.index !== storeLength ? 'mdi-page-last' : 'none'" />
+
+          </div>
+
         </div>
       </template>
     </div>
   </v-card>
-
-
 
   <!-- Dialog for Add Video -->
   <v-dialog v-model="videoDialog" style="max-width: 31em;">
@@ -51,9 +59,7 @@
                 <v-col class="d-flex align-center justify-center">
                   <v-row>
                     <v-card-text>
-                      <template v-if="videoTitle">
-                        {{ videoTitle }}
-                      </template>
+                      <template v-if="videoTitle">{{ videoTitle }}</template>
                       <template v-else>
                         <v-skeleton-loader type="paragraph" />
                       </template>
@@ -71,7 +77,6 @@
                 </v-row>
               </v-col>
             </v-card>
-
           </v-row>
         </v-card-text>
       </v-col>
@@ -84,25 +89,21 @@
           <v-col class="text-right">
             <v-btn text="Exit" variant="plain" @click="videoDialog = false"></v-btn>
           </v-col>
-
         </v-row>
-
-
-
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue';
 
 // Props
 const props = defineProps({
   index: { type: Number, required: true },
 });
 const videoStore = useVideoStore()
-
+const storeLength = ref(Object.keys(videoStore.video).length)
 
 // Reactive properties
 const Content = ref(false);
@@ -110,6 +111,11 @@ const videoDialog = ref(false);
 const youtubeLink = ref(videoStore.getVideoDetails(props.index).link || ''); // Input link
 const valid = ref(false); // Link validation state
 const videoTitle = ref(videoStore.getVideoDetails(props.index).name || ''); // Video title
+
+
+
+
+
 
 // Computed property to truncate the title
 const truncatedTitle = computed(() => {
@@ -124,7 +130,7 @@ const validateLink = async () => {
   if (valid.value) {
     await fetchVideoTitle();
   } else {
-    videoTitle.value = "";  // Clear title if invalid link
+    videoTitle.value = ''; // Clear title if invalid link
   }
 };
 
@@ -133,7 +139,7 @@ const thumbnail = computed(() => {
   const videoIdMatch = youtubeLink.value.match(/v=([^&]+)/);
   return videoIdMatch
     ? `https://img.youtube.com/vi/${videoIdMatch[1]}/maxresdefault.jpg`
-    : "";
+    : '';
 });
 
 // Fetch video title from YouTube page
@@ -149,14 +155,29 @@ const fetchVideoTitle = async () => {
 };
 
 // Handle click for adding or editing video
-const handleClick = () => {
-  if (Content.value) {
-    // If content exists, open the video dialog to edit the video
-    videoDialog.value = true;
-  } else {
-    // If no content, toggle the dialog to add a new video
-    videoDialog.value = !Content.value;
+const handleClick = (event: MouseEvent) => {
+  // Check if the clicked element is one of the shift buttons
+  if (event.target && !['mdi-page-first', 'mdi-page-last'].includes((event.target as HTMLElement).className)) {
+    // Toggle the dialog only if the clicked area is not the buttons
+    if (Content.value) {
+      videoDialog.value = true;
+    } else {
+      videoDialog.value = !Content.value;
+    }
   }
+};
+
+// Modify the button click handlers to stop event propagation
+const handleShiftLeft = (event: MouseEvent) => {
+  event.stopPropagation(); // Prevent the card click from triggering
+  console.log('Left button clicked');
+  // Add any specific action you want for the left button
+};
+
+const handleShiftRight = (event: MouseEvent) => {
+  event.stopPropagation(); // Prevent the card click from triggering
+  console.log('Right button clicked');
+  // Add any specific action you want for the right button
 };
 
 // Handle click for deleting video
@@ -166,9 +187,9 @@ const handleDelete = () => {
 
   // Reset the content state to indicate the video is deleted
   Content.value = false;
-  youtubeLink.value = "";  // Clear the YouTube link input
-  videoTitle.value = "";   // Clear the video title
-  valid.value = false;     // Reset validation state
+  youtubeLink.value = ''; // Clear the YouTube link input
+  videoTitle.value = '';  // Clear the video title
+  valid.value = false;    // Reset validation state
 
   // Close the dialog
   videoDialog.value = false;
@@ -178,7 +199,6 @@ const saveVideoLink = () => {
   videoStore.setVideoDetails(props.index, videoTitle.value, thumbnail.value, youtubeLink.value)
   Content.value = true;
   videoDialog.value = !Content.value;
-
 };
 
 // on Mount
@@ -186,5 +206,4 @@ if (videoStore.getVideoDetails(props.index).link) {
   Content.value = true
   validateLink()
 };
-
 </script>
