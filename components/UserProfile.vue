@@ -18,7 +18,6 @@
 <script setup>
 import { ref } from 'vue';
 const { data, signOut } = useAuth();
-console.log(data)
 
 // Track if the image load fails
 const imageLoadFailed = ref(false);

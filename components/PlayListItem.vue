@@ -87,7 +87,6 @@ currentWorkoutId.value = playStore.currentWorkout?.id || "";
 
 // Handle play button click
 function handlePlay(workout: typeof props.workout) {
-  console.log('Card clicked, loading workout:', workout.id);
   playStore.loadWorkout(workout.id);
 }
 </script>
