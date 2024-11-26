@@ -22,6 +22,20 @@ export const useVideoStore = defineStore("videoStore", {
       }
     },
 
+    swapVideos(index, direction) {
+      if (direction !== -1 && direction !== 1) {
+        throw new Error("Direction must be -1 or 1");
+      }
+
+      const swapIndex = index + direction;
+      if (this.video[swapIndex]) {
+        const temp = this.video[index];
+        this.video[index] = this.video[swapIndex];
+        this.video[swapIndex] = temp;
+      } else {
+        throw new Error("Invalid index for swap");
+      }
+    },
     getVideoDetails(index) {
       return this.video[index] || { name: "", thumbnail: "", link: "" };
     },

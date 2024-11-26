@@ -112,11 +112,6 @@ const youtubeLink = ref(videoStore.getVideoDetails(props.index).link || ''); // 
 const valid = ref(false); // Link validation state
 const videoTitle = ref(videoStore.getVideoDetails(props.index).name || ''); // Video title
 
-
-
-
-
-
 // Computed property to truncate the title
 const truncatedTitle = computed(() => {
   return videoTitle.value.length > 32
@@ -170,14 +165,12 @@ const handleClick = (event: MouseEvent) => {
 // Modify the button click handlers to stop event propagation
 const handleShiftLeft = (event: MouseEvent) => {
   event.stopPropagation(); // Prevent the card click from triggering
-  console.log('Left button clicked');
-  // Add any specific action you want for the left button
+  videoStore.swapVideos(props.index, -1)
 };
 
 const handleShiftRight = (event: MouseEvent) => {
   event.stopPropagation(); // Prevent the card click from triggering
-  console.log('Right button clicked');
-  // Add any specific action you want for the right button
+  videoStore.swapVideos(props.index, 1)
 };
 
 // Handle click for deleting video
