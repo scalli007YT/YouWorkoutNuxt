@@ -13,16 +13,19 @@
         </template>
 
         <template v-slot:item.2>
-          <v-card flat>
+
+
+          <v-card flat v-for="(item, index) in settings" :key="index">
             <v-row class="pa-2">
               <v-col cols="6" class="flex items-center justify-start">
-                <span class="text-left text-xl font-sans">Start Muted</span>
+                <span class="text-left text-xl font-sans">{{ item.label }}</span>
               </v-col>
               <v-col cols="6" class="flex items-center justify-end">
-                <v-switch color="primary" v-model="playStore.muted" hide-details />
+                <v-switch color="primary" v-model="playStore[item.model]" hide-details />
               </v-col>
             </v-row>
           </v-card>
+
 
           <v-row class="mt-4">
             <v-col class="text-left">
@@ -75,4 +78,9 @@ const startProcess = () => {
   // Logic to start the process
   console.log('Process Started');
 };
+
+const settings = [
+  { label: 'Start Muted', model: 'muted' },
+  { label: 'Start in fullscreen', model: 'fullscreen' },
+]
 </script>
