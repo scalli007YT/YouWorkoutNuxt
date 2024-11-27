@@ -49,7 +49,8 @@
             </v-row>
           </v-card>
 
-          <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-12">
+          <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-0"
+            direction="horizontal">
             <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
               <v-card>
                 <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
@@ -58,8 +59,27 @@
               <template v-slot:opposite>
                 <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">Start</v-btn>
               </template>
+
+              <!-- Progress bar between items -->
+              <v-progress-linear v-if="i < playStore.currentWorkout.contents.length - 1" color="blue" height="4"
+                :value="((i + 1) / playStore.currentWorkout.contents.length) * 100"></v-progress-linear>
             </v-timeline-item>
           </v-timeline>
+
+          <!-- <v-col>
+            <v-row>
+              {{ playStore.currentWorkout?.contents[1].name }}
+            </v-row>
+            <v-row>
+              {{ playStore.currentWorkout?.contents[2].name }}
+            </v-row>
+            <v-row>
+              {{ playStore.currentWorkout?.contents[3].name }}
+            </v-row>
+          </v-col> -->
+
+          <!-- 
+          <YoutubeEmbed videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" :autoplay="true" :mute="true" /> -->
 
           <v-row class="mt-4">
             <v-col class="text-left">
@@ -85,9 +105,16 @@
   <custom-dialog v-model="backDialog" icon="mdi-information-outline" header="Are you sure?"
     message="Your workout progress will be lost." button1-name="Cancel" button2-name="Go Back" button1-color=""
     button2-color="danger" :max-width="'36em'" @confirm="handleBack" @cancel="backDialog = false" />
+
+
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  middleware: 'auth'
+})
+
+
 import { ref, computed } from 'vue';
 
 // Types for PlayStore and Workout, ensuring no implicit 'any' type

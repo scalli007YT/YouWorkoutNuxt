@@ -46,7 +46,7 @@ const filteredWorkouts = computed<Workout[]>(() => workouts.value.filter(filterW
 <template>
   <ListSearch />
 
-  <v-list class="pa-0 max-h-[27.5em] overflow-y-auto custom-scrollbar">
+  <v-list class="pa-0 max-h-[26.5em] overflow-y-auto custom-scrollbar">
     <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
 
     <!-- Loop through filtered workouts -->

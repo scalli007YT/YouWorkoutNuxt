@@ -41,44 +41,50 @@
     </v-row>
   </v-card>
 
-  <custom-dialog v-model="dialogState" icon="mdi-puzzle-edit-outline" header="Edit Workout" :message="''" <!-- You can
-    leave the message empty or add a custom one if needed -->
-    button1-name="Cancel"
-    button2-name="Save"
-    @cancel="dialogState = false"
-    @confirm="updateWorkout"
-    :additional-buttons="[
-    { name: 'Delete', color: 'primary', handler: handleDelete }
-    ]">
+  <v-dialog v-model="dialogState">
+    <v-card prepend-icon="mdi-puzzle-edit-outline" append-icon="none" title="Edit Workout"
+      class="mx-auto pa-3 rounded-xl text-center text-base" style="max-width: 36em;">
 
-    <!-- Additional content inside the dialog -->
-    <v-divider></v-divider>
+      <v-divider></v-divider>
 
-    <v-list :key="refreshKey" class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
-      <v-list-item v-for="index in card_amount" :key="index" class="pa-1">
-        <ItemCard :index="index" />
-      </v-list-item>
-    </v-list>
+      <v-list :key="refreshKey" class="d-flex self-center mx-6" style="overflow-x: auto; white-space: nowrap;">
+        <v-list-item v-for="index in card_amount" :key="index" class="pa-1">
+          <ItemCard :index="index" />
+        </v-list-item>
+      </v-list>
 
-    <v-divider style="margin-bottom: 24px;"></v-divider>
+      <v-divider style="margin-bottom: 24px;"></v-divider>
 
-    <v-card-text>
-      <v-row dense>
-        <v-text-field label="Name*" variant="solo" v-model="name"></v-text-field>
-      </v-row>
-      <v-row dense>
-        <v-select label="Muscle Group*" :items="['HIIT', 'Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']"
-          variant="solo" v-model="musclegroup" chips multiple>
-        </v-select>
-      </v-row>
-      <v-row dense>
-        <v-select label="Intensity" :items="['Low', 'Medium', 'doable', 'High']" variant="solo"
-          v-model="intensity"></v-select>
-      </v-row>
-    </v-card-text>
+      <v-card-text>
+        <v-row dense>
+          <v-text-field label="Name*" variant="solo" v-model="name"></v-text-field>
+        </v-row>
+        <v-row dense>
+          <v-select label="Muscle Group*" :items="['HIIT', 'Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs']"
+            variant="solo" v-model="musclegroup" chips multiple>
+          </v-select>
+        </v-row>
+        <v-row dense>
+          <v-select label="Intensity" :items="['Low', 'Medium', 'doable', 'High']" variant="solo"
+            v-model="intensity"></v-select>
+        </v-row>
+      </v-card-text>
 
-  </custom-dialog>
+      <v-divider></v-divider>
 
+      <v-card-actions>
+        <v-row>
+          <v-col class="text-left">
+            <v-btn text="Cancel" @click="dialogState = false"></v-btn>
+            <v-btn color="primary" variant="plain" text="Delete" @click="handleDelete"></v-btn>
+          </v-col>
+          <v-col class="text-right">
+            <v-btn color="primary" text="Save" variant="outlined" @click="updateWorkout"></v-btn>
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>

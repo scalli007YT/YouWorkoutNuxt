@@ -1,11 +1,16 @@
 <template>
-  <v-card flat @click="handlePlay(workout)" class="border-solid rounded-xl pa-4 transition-all duration-300" :style="{
-    borderWidth:
-      currentWorkoutId === props.workout.id && playStore.selected
-        ? '4px'
-        : '1px',
-    fontSize: '1.5em',
-  }">
+  <v-card flat @click="handlePlay(workout)" class="border-solid rounded-xl pa-4 transition-all duration-800 bg-blend-"
+    :style="{
+      borderWidth:
+        currentWorkoutId === props.workout.id && playStore.selected
+          ? '3px'
+          : '1px',
+      backgroundColor:
+        currentWorkoutId === props.workout.id && playStore.selected
+          ? $vuetify.theme.current.colors.primary
+          : '',
+      fontSize: '1.5em',
+    }">
     <v-row align="center" justify="space-between" class="w-full">
       <v-col cols="12" sm="12" class="flex flex-col">
         <!-- Workout name -->
@@ -68,6 +73,7 @@ const props = defineProps({
 
 const playStore = usePlayStore();
 const currentWorkoutId = ref<string | null>(playStore.currentWorkout?.id || "");
+
 
 // Length calculation
 const contentArray = computed(() => Object.values(props.workout.contents));

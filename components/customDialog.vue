@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialogState" :style="{ maxWidth: maxWidth }">
-    <v-card :prepend-icon="icon" :title="header" class="mx-auto pa-3 rounded-xl text-center text-base">
+    <v-card :prepend-icon="icon" :title="header" class="mx-auto pa-3 rounded-xl text-center" append-icon="none">
       <v-divider class="mx-4"></v-divider>
       <v-card-text class="text-h6 font-weight-medium pa-4">{{ message }}</v-card-text>
       <v-divider class="mx-4"></v-divider>
