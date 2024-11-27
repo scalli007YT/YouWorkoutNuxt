@@ -1,8 +1,12 @@
 <template>
-  <v-card flat @click="handlePlay(workout)" class="border-solid rounded-xl pa-4 transition-all duration-300"
-    :style="{ borderWidth: currentWorkoutId === props.workout.id ? '4px' : '1px', fontSize: '1.5em' }">
+  <v-card flat @click="handlePlay(workout)" class="border-solid rounded-xl pa-4 transition-all duration-300" :style="{
+    borderWidth:
+      currentWorkoutId === props.workout.id && playStore.selected
+        ? '4px'
+        : '1px',
+    fontSize: '1.5em',
+  }">
     <v-row align="center" justify="space-between" class="w-full">
-      <!-- Left Column: Workout Name, Thumbnails, and Info -->
       <v-col cols="12" sm="12" class="flex flex-col">
         <!-- Workout name -->
         <v-card-title class="pa-3 text-xl font-semibold pb-0" style="white-space: normal; overflow-wrap: break-word;">
@@ -13,7 +17,6 @@
         <div class="flex items-center overflow-x-auto space-x-2 custom-scrollbar pl-3">
           <template v-for="(content, index) in workout?.contents" :key="index">
             <v-img :src="content.thumbnail" alt="Thumbnail" min-width="120" max-width="120" class="rounded-lg"></v-img>
-            <!-- Arrow between thumbnails (only between items) -->
             <v-icon v-if="index < contentLength" class="pa-0 ma-0 mx-1" size="x-small">mdi-arrow-right</v-icon>
           </template>
         </div>
@@ -21,8 +24,9 @@
         <!-- Intensity and Muscle Groups -->
         <v-row class="mt-0">
           <v-card-subtitle class="pa-6 flex items-center space-x-2 pt-2">
-
-            <v-chip prepend-icon="mdi-arm-flex" variant="outlined" size="large">{{ workout?.intensity }}</v-chip>
+            <v-chip prepend-icon="mdi-arm-flex" variant="outlined" size="large">
+              {{ workout?.intensity }}
+            </v-chip>
 
             <v-chip variant="outlined" size="large" class="pa-4">
               <v-icon>mdi-target</v-icon>
@@ -38,7 +42,6 @@
             <!-- Completions Chip (Moved here) -->
             <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large" class="pa-4">{{ workout?.completions
               }}</v-chip>
-
           </v-card-subtitle>
         </v-row>
       </v-col>
@@ -46,9 +49,8 @@
   </v-card>
 </template>
 
-
 <script lang="ts" setup>
-import { watch, ref } from 'vue';
+import { watch, ref, computed } from "vue";
 
 const props = defineProps({
   workout: {
@@ -65,25 +67,32 @@ const props = defineProps({
 });
 
 const playStore = usePlayStore();
-const currentWorkoutId = ref<string | null>(null); // Ref variable to store the current workout ID
+const currentWorkoutId = ref<string | null>(playStore.currentWorkout?.id || "");
 
 // Length calculation
 const contentArray = computed(() => Object.values(props.workout.contents));
-const contentLength = contentArray.value.length
-
+const contentLength = contentArray.value.length;
 
 // Watch for changes in currentWorkout.id
 watch(
   () => playStore.currentWorkout?.id,
   (newId) => {
     if (newId) {
-      currentWorkoutId.value = newId; // Update the ref with the new ID
+      currentWorkoutId.value = newId;
     }
   }
 );
-currentWorkoutId.value = playStore.currentWorkout?.id || "";
 
-
+// Watch for changes in playStore.selected
+watch(
+  () => playStore.selected,
+  (newVal) => {
+    // Apply borderWidth change logic
+    if (!newVal) {
+      currentWorkoutId.value = "";
+    }
+  }
+);
 
 // Handle play button click
 function handlePlay(workout: typeof props.workout) {

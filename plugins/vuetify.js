@@ -18,6 +18,7 @@ const workoutDark = {
     secondary: "#03DAC6",
     "secondary-darken-1": "#018786",
     error: "#CF6679",
+    danger: "#FF5252",
     info: "#2196F3",
     success: "#4CAF50",
     warning: "#FB8C00",
