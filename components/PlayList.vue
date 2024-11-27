@@ -46,7 +46,7 @@ const filteredWorkouts = computed<Workout[]>(() => workouts.value.filter(filterW
 <template>
   <ListSearch />
 
-  <v-list class="pa-0 max-h-[26.5em] overflow-y-auto custom-scrollbar">
+  <v-list class="pa-0 max-h-[26.5em] overflow-y-auto scrollbar-thumb-rounded-full">
     <v-skeleton-loader v-if="loading" type="list-item-avatar" class="pa-0 my-2" :loading="loading" />
 
     <!-- Loop through filtered workouts -->
@@ -56,27 +56,18 @@ const filteredWorkouts = computed<Workout[]>(() => workouts.value.filter(filterW
   </v-list>
 </template>
 
+
 <style>
 .custom-scrollbar::-webkit-scrollbar {
-  width: 0;
-  /* Hide scrollbar width */
-  height: 0;
-  /* For horizontal scrollbars */
+  width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  /* Ensure the scrollbar thumb is invisible */
+  background-color: #888;
+  border-radius: 4px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track:hover {
   background: transparent;
-  /* Ensure the track is invisible */
-}
-
-/* For Firefox */
-.custom-scrollbar {
-  scrollbar-width: none;
-  /* Hide scrollbar in Firefox */
 }
 </style>

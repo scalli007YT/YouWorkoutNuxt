@@ -49,34 +49,24 @@
             </v-row>
           </v-card>
 
-          <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-0"
-            direction="horizontal">
-            <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
-              <v-card>
-                <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
-              </v-card>
+          <div class="overflow-x-auto whitespace-nowrap">
+            <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-0"
+              direction="horizontal">
+              <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
+                <v-card>
+                  <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
+                </v-card>
 
-              <template v-slot:opposite>
-                <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">Start</v-btn>
-              </template>
+                <template v-slot:opposite>
+                  <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">Start</v-btn>
+                </template>
 
-              <!-- Progress bar between items -->
-              <v-progress-linear v-if="i < playStore.currentWorkout.contents.length - 1" color="blue" height="4"
-                :value="((i + 1) / playStore.currentWorkout.contents.length) * 100"></v-progress-linear>
-            </v-timeline-item>
-          </v-timeline>
-
-          <!-- <v-col>
-            <v-row>
-              {{ playStore.currentWorkout?.contents[1].name }}
-            </v-row>
-            <v-row>
-              {{ playStore.currentWorkout?.contents[2].name }}
-            </v-row>
-            <v-row>
-              {{ playStore.currentWorkout?.contents[3].name }}
-            </v-row>
-          </v-col> -->
+                <!-- Progress bar between items -->
+                <v-progress-linear v-if="i < playStore.currentWorkout.contents.length - 1" color="blue" height="4"
+                  :value="((i + 1) / playStore.currentWorkout.contents.length) * 100"></v-progress-linear>
+              </v-timeline-item>
+            </v-timeline>
+          </div>
 
           <!-- 
           <YoutubeEmbed videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" :autoplay="true" :mute="true" /> -->
@@ -180,3 +170,27 @@ const startProcess = (workout: Workout) => {
   console.log(workout);
 };
 </script>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0;
+  /* Hide scrollbar width */
+  height: 0;
+  /* For horizontal scrollbars */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  /* Ensure the scrollbar thumb is invisible */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  /* Ensure the track is invisible */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: none;
+}
+</style>
