@@ -13,7 +13,8 @@ export const usePlayStore = defineStore("playStore", {
     current_tab: 1,
     progress: 0,
     muted: false,
-    fullscreen: true,
+    autoplay: true,
+    playing: false,
   }),
   actions: {
     // Load a specific workout from Firestore into the store

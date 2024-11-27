@@ -53,17 +53,20 @@
             </v-row>
           </v-card>
 
+          <!-- Conditionally rendered YoutubeEmbed component -->
+          <YoutubeEmbed v-if="selectedVideoUrl && playStore.playing" :video-url="selectedVideoUrl"
+            :mute="playStore.muted" :autoplay="playStore.autoplay" />
+
           <!-- Workout Timeline -->
-          <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
-            <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-24">
+          <div class="mx-auto">
+            <v-timeline v-if="playStore.currentWorkout && !playStore.playing" side="end" truncate-line="both" class="">
               <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
                 <v-card>
-                  <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="200" class="rounded-lg"></v-img>
+                  <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
                 </v-card>
 
                 <template v-slot:opposite>
-                  <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play"
-                    variant="outlined">Start</v-btn>
+                  <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">Start</v-btn>
                 </template>
 
               </v-timeline-item>
@@ -72,12 +75,19 @@
 
           <v-row class="mt-4">
             <v-col class="text-left">
-              <v-btn color="surface-variant" text="Back to Playlist" :disabled="!playStore.selected" variant="outlined"
-                @click="backDialog = true" :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
+              <v-btn v-if="!playStore.playing" color="surface-variant" text="Back to Selection"
+                :disabled="!playStore.selected" variant="outlined" @click="backDialog = true"
+                :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
+              <v-btn v-if="playStore.playing" color="surface-variant" text="Back to List"
+                :disabled="!playStore.selected" variant="outlined" @click="playStore.playing = false"
+                :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Complete Workout" :disabled="!playStore.selected" variant="outlined"
-                @click="startProcess(workout)"
+              <v-btn v-if="!playStore.playing" color="primary" text="Complete Workout" :disabled="!playStore.selected"
+                variant="outlined" @click="handleComplete(playStore.currentWorkout)"
+                :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
+              <v-btn v-if="playStore.playing" color="primary" text="Next Video" :disabled="!playStore.selected"
+                variant="outlined" @click="handleComplete(playStore.currentWorkout)"
                 :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
             </v-col>
           </v-row>
@@ -110,17 +120,20 @@ interface PlayStore {
   selected: boolean;
   currentWorkout: { contents: Array<{ thumbnail: string }> } | null;
   muted: boolean;
-  fullscreen: boolean;
+  autoplay: boolean;
 }
 
 interface Workout {
   thumbnail: string;
+  link: string;
 }
 
 const playStore = usePlayStore() as PlayStore;
 
 const backDialog = ref(false);
 const startDialog = ref(false);
+
+const selectedVideoUrl = ref<string | null>(null); // Video URL state
 
 const step = computed({
   get: () => playStore.current_tab,
@@ -131,19 +144,21 @@ const step = computed({
 
 const settings = [
   { label: 'Start with sound muted', model: 'muted' },
-  { label: 'Start in fullscreen', model: 'fullscreen' },
+  { label: 'Start in Autoplay', model: 'autoplay' },
 ];
 
 const cardSizeClass = computed(() => {
   switch (step.value) {
     case 1: return 'max-w-3xl';
     case 2: return 'max-w-xl';
-    case 3: return 'max-w-full';
+    case 3: return 'max-w-3xl';
   }
 });
 
 const handleButtonClick = (workout: Workout) => {
   console.log('Button clicked for workout:', workout);
+  playStore.playing = true
+  selectedVideoUrl.value = workout.link; // Set the video URL dynamically
 };
 
 const handleStart = () => {
@@ -158,26 +173,7 @@ const handleBack = () => {
   step.value = 1;
 };
 
-const startProcess = (workout: Workout) => {
+const handleComplete = (workout: Workout) => {
   console.log(workout);
 };
 </script>
-
-<style>
-.custom-scrollbar::-webkit-scrollbar {
-  height: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: gray;
-  border-radius: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar {
-  scrollbar-width: 8px;
-}
-</style>
