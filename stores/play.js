@@ -11,6 +11,7 @@ export const usePlayStore = defineStore("playStore", {
     currentWorkout: null, // Holds the single workout
     selected: false,
     current_tab: 1,
+    progress: 0,
     muted: false,
     fullscreen: true,
   }),

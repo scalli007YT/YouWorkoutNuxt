@@ -2,14 +2,17 @@
   <v-container>
     <v-card elevation="8" class="mx-auto pa-6 rounded-xl border" :class="cardSizeClass"
       style="transition: max-width 0.3s;">
-      <v-stepper v-model="step" hide-actions flat :items="['Select', 'Settings', 'Workout']">
+
+      <!-- Stepper Component with Progress Bar -->
+      <v-stepper v-model="step" hide-actions flat :items="['Select Playlist', 'Settings', 'Workout']">
+
         <!-- Step 1: Playlist Selection -->
         <template v-slot:item.1>
           <PlayList />
           <v-row class="mt-4">
             <v-col class="text-right">
               <v-btn color="primary" text="Continue" :disabled="!playStore.selected" variant="outlined"
-                @click="step = 2"></v-btn>
+                @click="step = 2" :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
             </v-col>
           </v-row>
         </template>
@@ -30,11 +33,12 @@
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
-                @click="step = 1"></v-btn>
+                @click="step = 1" :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Start Workout" :disabled="!playStore.selected" variant="outlined"
-                @click="startDialog = true"></v-btn>
+              <v-btn color="primary" text="Start Training" :disabled="!playStore.selected" variant="outlined"
+                @click="startDialog = true"
+                :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
             </v-col>
           </v-row>
         </template>
@@ -42,43 +46,39 @@
         <!-- Step 3: Workout Details -->
         <template v-slot:item.3>
           <v-card flat>
-            <v-row class="pa-0" align="center" justify="center">
+            <v-row class="mb-4" align="center" justify="center">
               <v-col class="text-center">
-                <span class="text-h5">Start</span>
+                <span class="text-h5">Please select a starting point</span>
               </v-col>
             </v-row>
           </v-card>
 
-          <div class="overflow-x-auto whitespace-nowrap">
-            <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-0"
-              direction="horizontal">
+          <!-- Workout Timeline -->
+          <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
+            <v-timeline v-if="playStore.currentWorkout" side="end" truncate-line="both" class="ml-24">
               <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
                 <v-card>
-                  <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
+                  <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="200" class="rounded-lg"></v-img>
                 </v-card>
 
                 <template v-slot:opposite>
-                  <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">Start</v-btn>
+                  <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play"
+                    variant="outlined">Start</v-btn>
                 </template>
 
-                <!-- Progress bar between items -->
-                <v-progress-linear v-if="i < playStore.currentWorkout.contents.length - 1" color="blue" height="4"
-                  :value="((i + 1) / playStore.currentWorkout.contents.length) * 100"></v-progress-linear>
               </v-timeline-item>
             </v-timeline>
           </div>
 
-          <!-- 
-          <YoutubeEmbed videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" :autoplay="true" :mute="true" /> -->
-
           <v-row class="mt-4">
             <v-col class="text-left">
-              <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
-                @click="backDialog = true"></v-btn>
+              <v-btn color="surface-variant" text="Back to Playlist" :disabled="!playStore.selected" variant="outlined"
+                @click="backDialog = true" :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Finish" :disabled="!playStore.selected" variant="outlined"
-                @click="startProcess(workout)"></v-btn>
+              <v-btn color="primary" text="Complete Workout" :disabled="!playStore.selected" variant="outlined"
+                @click="startProcess(workout)"
+                :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
             </v-col>
           </v-row>
         </template>
@@ -86,17 +86,16 @@
     </v-card>
   </v-container>
 
-  <!-- Custom Dialogs -->
-  <custom-dialog v-model="startDialog" icon="mdi-information-outline" header="Are you sure?"
-    message="You won’t be able to change the workout without resetting the progress." button1-name="Cancel"
-    button2-name="Start" button1-color="" button2-color="success" :max-width="'29em'" @confirm="handleStart"
-    @cancel="startDialog = false" />
+  <!-- Custom Dialogs with Specific Messages -->
+  <custom-dialog v-model="startDialog" icon="mdi-information-outline" header="Sure to start?"
+    message="Once you start the workout, you won't be able to change it without resetting your progress."
+    button1-name="Cancel" button2-name="Start" button1-color="" button2-color="success" :max-width="'29em'"
+    @confirm="handleStart" @cancel="startDialog = false" />
 
   <custom-dialog v-model="backDialog" icon="mdi-information-outline" header="Are you sure?"
-    message="Your workout progress will be lost." button1-name="Cancel" button2-name="Go Back" button1-color=""
-    button2-color="danger" :max-width="'36em'" @confirm="handleBack" @cancel="backDialog = false" />
-
-
+    message="If you go back, your current progress will be lost." button1-name="Cancel"
+    button2-name="Return to Playlist" button1-color="" button2-color="danger" :max-width="'36em'" @confirm="handleBack"
+    @cancel="backDialog = false" />
 </template>
 
 <script lang="ts" setup>
@@ -104,10 +103,8 @@ definePageMeta({
   middleware: 'auth'
 })
 
-
 import { ref, computed } from 'vue';
 
-// Types for PlayStore and Workout, ensuring no implicit 'any' type
 interface PlayStore {
   current_tab: number;
   selected: boolean;
@@ -120,13 +117,11 @@ interface Workout {
   thumbnail: string;
 }
 
-const playStore = usePlayStore() as PlayStore; // Assuming usePlayStore is already defined
+const playStore = usePlayStore() as PlayStore;
 
-// Dialog states
 const backDialog = ref(false);
 const startDialog = ref(false);
 
-// Current step in the stepper
 const step = computed({
   get: () => playStore.current_tab,
   set: (value: number) => {
@@ -134,29 +129,26 @@ const step = computed({
   },
 });
 
-// Settings configuration
 const settings = [
-  { label: 'Start Muted', model: 'muted' },
+  { label: 'Start with sound muted', model: 'muted' },
   { label: 'Start in fullscreen', model: 'fullscreen' },
 ];
 
-// Dynamically change card size based on the current step
 const cardSizeClass = computed(() => {
   switch (step.value) {
-    case 1: return 'max-w-3xl'; // Step 1
-    case 2: return 'max-w-xl'; // Step 2
-    case 3: return 'max-w-full'; // Step 3
+    case 1: return 'max-w-3xl';
+    case 2: return 'max-w-xl';
+    case 3: return 'max-w-full';
   }
 });
 
-// Handlers
 const handleButtonClick = (workout: Workout) => {
   console.log('Button clicked for workout:', workout);
 };
 
 const handleStart = () => {
-  step.value++
-  startDialog.value = false
+  step.value++;
+  startDialog.value = false;
 };
 
 const handleBack = () => {
@@ -170,3 +162,22 @@ const startProcess = (workout: Workout) => {
   console.log(workout);
 };
 </script>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar {
+  scrollbar-width: 8px;
+}
+</style>
