@@ -170,27 +170,3 @@ const startProcess = (workout: Workout) => {
   console.log(workout);
 };
 </script>
-
-<style>
-.custom-scrollbar::-webkit-scrollbar {
-  width: 0;
-  /* Hide scrollbar width */
-  height: 0;
-  /* For horizontal scrollbars */
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  /* Ensure the scrollbar thumb is invisible */
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-  /* Ensure the track is invisible */
-}
-
-/* For Firefox */
-.custom-scrollbar {
-  scrollbar-width: none;
-}
-</style>
