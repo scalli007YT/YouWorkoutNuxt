@@ -43,18 +43,11 @@
 
         <!-- Step 3: Workout -->
         <template v-slot:item.3>
-          <v-card flat>
-            <v-row class="mb-4" align="center" justify="center">
-              <v-col class="text-center">
-                <span class="text-h5">Please select a starting point</span>
-              </v-col>
-            </v-row>
-          </v-card>
 
           <youtubeEmbed v-if="playStore.mode === 'playing'" :videoUrl="playStore.current_video.link"
             :autoplay="playStore.autoplay" :mute="playStore.muted" />
-          <CustomTimeline v-if="playStore.mode === 'selection'" :contents="playStore.currentWorkout?.contents"
-            @startWorkout="handleButtonClick" />
+          <CustomTimeline v-if="playStore.mode === 'selection' && playStore.currentWorkout"
+            :contents="playStore.currentWorkout?.contents" @startWorkout="handleButtonClick" />
 
           <v-row class="mt-4">
             <v-col class="text-left">

@@ -24,7 +24,7 @@ const loader = ref(true);
 // Define props with the expected type and required property
 const props = defineProps({
   contents: {
-    type: Array,
+    type: Object,
     required: true
   }
 });
