@@ -3,7 +3,9 @@
     <v-timeline side="end" truncate-line="both">
       <v-timeline-item v-for="(workout, i) in contents" :key="i" size="small">
         <v-card>
-          <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
+          <v-skeleton-loader v-if="loader" type="card" max-height="82"></v-skeleton-loader>
+          <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"
+            @load="loader = false"></v-img>
         </v-card>
 
         <template v-slot:opposite>
@@ -15,12 +17,14 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
+
+const loader = ref(true);
 
 // Define props with the expected type and required property
 const props = defineProps({
   contents: {
-    type: Object,
+    type: Array,
     required: true
   }
 });

@@ -4,13 +4,14 @@
       style="transition: max-width 0.3s;">
       <!-- Stepper Component with Progress Bar -->
       <v-stepper v-model="step" hide-actions flat :items="['Select Playlist', 'Settings', 'Workout']">
+
         <!-- Step 1: Playlist Selection -->
         <template v-slot:item.1>
           <PlayList />
           <v-row class="mt-4">
             <v-col class="text-right">
               <v-btn color="primary" text="Continue" :disabled="!playStore.selected" variant="outlined"
-                @click="step = 2" :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
+                @click="step = 2" :title="!playStore.selected ? 'Please select a playlist first' : ''" />
             </v-col>
           </v-row>
         </template>
@@ -31,12 +32,11 @@
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
-                @click="step = 1" :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
+                @click="step = 1" :title="!playStore.selected ? 'Select a playlist first' : ''" />
             </v-col>
             <v-col class="text-right">
               <v-btn color="primary" text="Start Training" :disabled="!playStore.selected" variant="outlined"
-                @click="startDialog = true"
-                :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
+                @click="startDialog = true" :title="!playStore.selected ? 'Please select a playlist first' : ''" />
             </v-col>
           </v-row>
         </template>
@@ -51,27 +51,22 @@
             </v-row>
           </v-card>
 
-          <youtubeEmbed v-if="playStore.mode == 'playing'" :videoUrl="playStore.current_video.link"
-            :autoplay="playStore.autoplay" :mute="playStore.muted" class="border" />
-
-          <CustomTimeline :contents="playStore.currentWorkout?.contents" @startWorkout="handleButtonClick"
-            class="border" />
+          <youtubeEmbed v-if="playStore.mode === 'playing'" :videoUrl="playStore.current_video.link"
+            :autoplay="playStore.autoplay" :mute="playStore.muted" />
+          <CustomTimeline v-if="playStore.mode === 'selection'" :contents="playStore.currentWorkout?.contents"
+            @startWorkout="handleButtonClick" />
 
           <v-row class="mt-4">
             <v-col class="text-left">
               <v-btn :color="'surface-variant'" variant="outlined"
-                @click="playStore.mode === 'selection' ? backDialog = true : playStore.mode = 'selection'" :text="''">
+                @click="playStore.mode === 'selection' ? backDialog = true : playStore.mode = 'selection'">
                 {{ playStore.mode === 'selection' ? 'Back to Selection' : 'Back to List' }}
               </v-btn>
-
-
             </v-col>
             <v-col class="text-right">
               <v-btn :color="'primary'" variant="outlined" @click="handleComplete(playStore.currentWorkout)">
                 {{ playStore.mode === 'selection' ? 'Complete Workout' : 'Next Video' }}
               </v-btn>
-
-
             </v-col>
           </v-row>
         </template>
@@ -113,7 +108,6 @@ interface Workout {
 }
 
 const playStore = usePlayStore() as PlayStore;
-
 const backDialog = ref(false);
 const startDialog = ref(false);
 
