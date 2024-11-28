@@ -1,3 +1,4 @@
+// playStore.ts (Pinia Store)
 import { defineStore } from "pinia";
 import { collection, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
 
@@ -8,16 +9,15 @@ export const usePlayStore = defineStore("playStore", {
       intensity: [],
       group: [],
     },
-    currentWorkout: null, // Holds the single workout
+    currentWorkout: null,
     selected: false,
     current_tab: 1,
-    progress: 0,
+    current_video: {},
     muted: false,
     autoplay: true,
-    playing: false,
+    mode: "selection", // or playing
   }),
   actions: {
-    // Load a specific workout from Firestore into the store
     async loadWorkout(id) {
       const { $db } = useNuxtApp();
       const { data } = useAuth();
@@ -28,7 +28,7 @@ export const usePlayStore = defineStore("playStore", {
         this.currentWorkout = { id: workoutDoc.id, ...workoutDoc.data() };
         this.selected = true;
       } else {
-        this.currentWorkout = null; // Clear if not found
+        this.currentWorkout = null;
       }
     },
   },

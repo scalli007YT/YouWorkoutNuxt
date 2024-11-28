@@ -2,10 +2,8 @@
   <v-container>
     <v-card elevation="8" class="mx-auto pa-6 rounded-xl border" :class="cardSizeClass"
       style="transition: max-width 0.3s;">
-
       <!-- Stepper Component with Progress Bar -->
       <v-stepper v-model="step" hide-actions flat :items="['Select Playlist', 'Settings', 'Workout']">
-
         <!-- Step 1: Playlist Selection -->
         <template v-slot:item.1>
           <PlayList />
@@ -43,7 +41,7 @@
           </v-row>
         </template>
 
-        <!-- Step 3: Workout Details -->
+        <!-- Step 3: Workout -->
         <template v-slot:item.3>
           <v-card flat>
             <v-row class="mb-4" align="center" justify="center">
@@ -53,42 +51,27 @@
             </v-row>
           </v-card>
 
-          <!-- Conditionally rendered YoutubeEmbed component -->
-          <YoutubeEmbed v-if="selectedVideoUrl && playStore.playing" :video-url="selectedVideoUrl"
-            :mute="playStore.muted" :autoplay="playStore.autoplay" />
+          <youtubeEmbed v-if="playStore.mode == 'playing'" :videoUrl="playStore.current_video.link"
+            :autoplay="playStore.autoplay" :mute="playStore.muted" class="border" />
 
-          <!-- Workout Timeline -->
-          <div class="mx-auto">
-            <v-timeline v-if="playStore.currentWorkout && !playStore.playing" side="end" truncate-line="both" class="">
-              <v-timeline-item v-for="(workout, i) in playStore.currentWorkout.contents" :key="i" size="small">
-                <v-card>
-                  <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"></v-img>
-                </v-card>
-
-                <template v-slot:opposite>
-                  <v-btn color="primary" @click="handleButtonClick(workout)" prepend-icon="mdi-play">Start</v-btn>
-                </template>
-
-              </v-timeline-item>
-            </v-timeline>
-          </div>
+          <CustomTimeline :contents="playStore.currentWorkout?.contents" @startWorkout="handleButtonClick"
+            class="border" />
 
           <v-row class="mt-4">
             <v-col class="text-left">
-              <v-btn v-if="!playStore.playing" color="surface-variant" text="Back to Selection"
-                :disabled="!playStore.selected" variant="outlined" @click="backDialog = true"
-                :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
-              <v-btn v-if="playStore.playing" color="surface-variant" text="Back to List"
-                :disabled="!playStore.selected" variant="outlined" @click="playStore.playing = false"
-                :title="!playStore.selected ? 'Select a playlist first' : ''"></v-btn>
+              <v-btn :color="'surface-variant'" variant="outlined"
+                @click="playStore.mode === 'selection' ? backDialog = true : playStore.mode = 'selection'" :text="''">
+                {{ playStore.mode === 'selection' ? 'Back to Selection' : 'Back to List' }}
+              </v-btn>
+
+
             </v-col>
             <v-col class="text-right">
-              <v-btn v-if="!playStore.playing" color="primary" text="Complete Workout" :disabled="!playStore.selected"
-                variant="outlined" @click="handleComplete(playStore.currentWorkout)"
-                :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
-              <v-btn v-if="playStore.playing" color="primary" text="Next Video" :disabled="!playStore.selected"
-                variant="outlined" @click="handleComplete(playStore.currentWorkout)"
-                :title="!playStore.selected ? 'Please select a playlist first' : ''"></v-btn>
+              <v-btn :color="'primary'" variant="outlined" @click="handleComplete(playStore.currentWorkout)">
+                {{ playStore.mode === 'selection' ? 'Complete Workout' : 'Next Video' }}
+              </v-btn>
+
+
             </v-col>
           </v-row>
         </template>
@@ -121,6 +104,7 @@ interface PlayStore {
   currentWorkout: { contents: Array<{ thumbnail: string }> } | null;
   muted: boolean;
   autoplay: boolean;
+  mode: string;
 }
 
 interface Workout {
@@ -132,8 +116,6 @@ const playStore = usePlayStore() as PlayStore;
 
 const backDialog = ref(false);
 const startDialog = ref(false);
-
-const selectedVideoUrl = ref<string | null>(null); // Video URL state
 
 const step = computed({
   get: () => playStore.current_tab,
@@ -155,10 +137,9 @@ const cardSizeClass = computed(() => {
   }
 });
 
-const handleButtonClick = (workout: Workout) => {
-  console.log('Button clicked for workout:', workout);
-  playStore.playing = true
-  selectedVideoUrl.value = workout.link; // Set the video URL dynamically
+const handleButtonClick = (current_video: Workout) => {
+  playStore.mode = 'playing';
+  playStore.current_video = current_video
 };
 
 const handleStart = () => {

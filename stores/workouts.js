@@ -42,7 +42,7 @@ export const useWorkoutStore = defineStore("workoutStore", {
         name,
         musclegroup,
         intensity,
-        completions: 0,
+        completions: {},
       };
 
       const { $db } = useNuxtApp();
