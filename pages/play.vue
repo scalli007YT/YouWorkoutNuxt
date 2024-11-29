@@ -57,7 +57,8 @@
             </v-col>
             <v-col class="text-right">
               <v-btn :color="'primary'" variant="outlined" @click="handleNextClick(playStore.current_video)">
-                {{ isLastVideo(playStore.current_video) ? 'Complete Workout' : 'Next Video' }}
+                {{ (isLastVideo(playStore.current_video) || (playStore.mode == 'selection')) ? 'Complete Workout' :
+                  'Next Video' }}
               </v-btn>
             </v-col>
           </v-row>
@@ -69,13 +70,17 @@
   <!-- Custom Dialogs -->
   <custom-dialog v-model="startDialog" icon="mdi-information-outline" header="Sure to start?"
     message="Once you start the workout, you won't be able to change it without resetting your progress."
-    button1-name="Cancel" button2-name="Start" button1-color="" button2-color="success" :max-width="'29em'"
-    @confirm="handleStart" @cancel="startDialog = false" />
+    button1-name="Cancel" button2-name="Start" button2-color="success" :max-width="'29em'" @confirm="handleStart"
+    @cancel="startDialog = false" />
 
   <custom-dialog v-model="backDialog" icon="mdi-information-outline" header="Are you sure?"
     message="If you go back, your current progress will be lost." button1-name="Cancel"
-    button2-name="Return to Playlist" button1-color="" button2-color="danger" :max-width="'36em'" @confirm="handleBack"
+    button2-name="Return to Playlist" button2-color="danger" :max-width="'36em'" @confirm="handleBack"
     @cancel="backDialog = false" />
+
+  <custom-dialog v-model="completeDialog" icon="mdi-check" header="Are you sure?"
+    message="If you complete, you can't go back" button1-name="Cancel" button2-name="Complete" button2-color="success"
+    :max-width="'36em'" @confirm="handleComplete(playStore.currentWorkout)" @cancel="completeDialog = false" />
 </template>
 
 <script lang="ts" setup>
@@ -103,6 +108,7 @@ interface Workout {
 const playStore = usePlayStore() as PlayStore;
 const backDialog = ref(false);
 const startDialog = ref(false);
+const completeDialog = ref(false);
 
 const step = computed({
   get: () => playStore.current_tab,
@@ -129,9 +135,19 @@ const cardSizeClass = computed(() => {
 
 const addProgressToContents = () => {
   Object.values(playStore.currentWorkout?.contents || {}).forEach((video) => {
+    // Add progress if it doesn't exist
     video.progress ??= 'not_started';
+    // Assign a unique ID to each video if it doesn't already have one
+    if (!video.id) {
+      video.id = generateUniqueId();  // Generate and assign a unique ID
+    }
   });
 };
+const generateUniqueId = (): string => {
+  return '_' + Math.random().toString(36).slice(2, 11);  // Use slice instead of substr
+};
+
+
 
 const checkState = () => {
   if (playStore.current_video.progress === 'not_started') {
@@ -150,8 +166,8 @@ const handleStartButton = (current_video: Workout) => {
 };
 
 const handleNextClick = (current_video: Workout) => {
-  if (isLastVideo(current_video)) {
-    handleComplete(playStore.currentWorkout);
+  if (isLastVideo(current_video) || playStore.mode == 'selection') {
+    completeDialog.value = true;
   } else {
     handleNextButton(current_video);
   }
@@ -160,25 +176,23 @@ const handleNextClick = (current_video: Workout) => {
 const handleNextButton = (current_video: Workout) => {
   finishState();
 
-  const currentIndex = Object.values(playStore.currentWorkout?.contents || {}).findIndex(
-    (video) => video.link === current_video.link
-  );
+  const contents = Object.values(playStore.currentWorkout?.contents || {});
+  const currentIndex = contents.findIndex(video => video.id === current_video.id);
 
-  const nextIndex = currentIndex + 1;
-  const next_video = nextIndex < Object.values(playStore.currentWorkout?.contents || {}).length
-    ? Object.values(playStore.currentWorkout?.contents || {})[nextIndex]
-    : null;
+  if (currentIndex === -1) return console.error('Current video not found');
 
-  if (next_video) {
-    playStore.current_video = next_video;
-  }
+  const next_video = contents[currentIndex + 1] || null;
+  if (next_video) playStore.current_video = next_video;
 
   checkState();
 };
 
+
+
+
 const isLastVideo = (current_video: Workout) => {
   const currentIndex = Object.values(playStore.currentWorkout?.contents || {}).findIndex(
-    (video) => video.link === current_video.link
+    (video) => video.id === current_video.id  // Use the unique id here
   );
   return currentIndex === Object.values(playStore.currentWorkout?.contents || {}).length - 1;
 };
@@ -198,5 +212,6 @@ const handleBack = () => {
 
 const handleComplete = (workout: Workout) => {
   console.log('Workout Completed');
+  completeDialog.value = false;
 };
 </script>
