@@ -12,19 +12,7 @@
 
       <v-spacer></v-spacer>
 
-      <template v-if="isClient && data">
-        <v-btn icon @click="toggleTheme">
-          <v-icon>mdi-theme-light-dark</v-icon>
-          <v-tooltip activator="parent" location="bottom">Toggle Theme</v-tooltip>
-        </v-btn>
-
-        <v-btn icon @click="openSettings">
-          <v-icon>mdi-cog</v-icon>
-          <v-tooltip activator="parent" location="bottom">Open Settings</v-tooltip>
-        </v-btn>
-
-        <UserProfile />
-      </template>
+      <UserProfile v-if="isClient && data" />
     </v-app-bar>
 
     <v-main>

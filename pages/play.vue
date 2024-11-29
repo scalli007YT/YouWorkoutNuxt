@@ -10,7 +10,7 @@
           <PlayList />
           <v-row class="mt-4">
             <v-col class="text-right">
-              <v-btn color="primary" text="Continue" :disabled="!playStore.selected" variant="outlined"
+              <v-btn color="primary" text="Continue" :disabled="!playStore.selected" variant="elevated"
                 @click="step = 2" :title="!playStore.selected ? 'Please select a playlist first' : ''" />
             </v-col>
           </v-row>
