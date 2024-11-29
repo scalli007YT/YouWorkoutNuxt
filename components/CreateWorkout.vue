@@ -38,10 +38,10 @@
       <v-card-actions>
         <v-row>
           <v-col class="text-left">
-            <v-btn text="Cancel" prepend-icon="mdi-cancel" variant="plain" @click="dialog = false"></v-btn>
+            <v-btn text="Cancel" prepend-icon="mdi-cancel" variant="tonal" @click="dialog = false"></v-btn>
           </v-col>
           <v-col class="text-right">
-            <v-btn color="primary" prepend-icon="mdi-content-save-edit" text="Save" variant="outlined"
+            <v-btn color="primary" prepend-icon="mdi-content-save-edit" text="Save" variant="elevated"
               @click="handleSubmit"></v-btn>
           </v-col>
         </v-row>

@@ -4,13 +4,14 @@
       <v-divider class="mx-4"></v-divider>
       <v-card-text class="text-h6 font-weight-medium pa-4">{{ message }}</v-card-text>
       <v-divider class="mx-4"></v-divider>
-      <v-card-actions>
+      <v-card-actions class="mx-2">
         <v-row>
           <v-col class="text-left">
-            <v-btn :color="button1Color" text @click="cancelAction">{{ button1Name }}</v-btn>
+            <v-btn :color="button1Color" variant="tonal" @click="cancelAction">{{ button1Name }}</v-btn>
           </v-col>
           <v-col class="text-right">
-            <v-btn :color="button2Color" text @click="confirmAction" variant="outlined">{{ button2Name }}</v-btn>
+            <v-btn :color="button2Color" @click="confirmAction" variant="elevated">{{ button2Name
+              }}</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>

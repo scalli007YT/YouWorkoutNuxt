@@ -35,7 +35,7 @@
                 @click="step = 1" :title="!playStore.selected ? 'Select a playlist first' : ''" />
             </v-col>
             <v-col class="text-right">
-              <v-btn color="primary" text="Start Training" :disabled="!playStore.selected" variant="outlined"
+              <v-btn color="primary" text="Start Training" :disabled="!playStore.selected" variant="elevated"
                 @click="startDialog = true" :title="!playStore.selected ? 'Please select a playlist first' : ''" />
             </v-col>
           </v-row>
@@ -56,7 +56,7 @@
               </v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn :color="'primary'" variant="outlined" @click="handleNextClick(playStore.current_video)">
+              <v-btn :color="'primary'" variant="elevated" @click="handleNextClick(playStore.current_video)">
                 {{ (isLastVideo(playStore.current_video) || (playStore.mode == 'selection')) ? 'Complete Workout' :
                   'Next Video' }}
               </v-btn>
