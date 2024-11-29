@@ -9,7 +9,6 @@
         <NuxtLink to="/">YouWorkout</NuxtLink>
       </v-app-bar-title>
 
-
       <v-spacer></v-spacer>
 
       <UserProfile v-if="isClient && data" />
@@ -18,6 +17,7 @@
     <v-main>
       <NuxtPage />
     </v-main>
+
 
 
   </v-app>
