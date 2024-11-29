@@ -18,7 +18,7 @@
                             </v-col>
                             <v-divider inset vertical class="mx-2"></v-divider>
                             <v-col class="text-center">
-                                <div class="text-3xl font-bold">0</div>
+                                <div class="text-3xl font-bold">{{ completionCount }}</div>
                             </v-col>
                         </v-row>
                     </v-card>
@@ -91,11 +91,18 @@ definePageMeta({
 
 const store = useWorkoutStore();
 
+const completionCount = ref(0);
+
 // Automatically fetch workouts when the module is loaded
 onMounted(async () => {
     await store.updateUserWorkouts();  // Wait for the workout data to load
-});
 
+    // Calculate the total completions count
+    completionCount.value = store.workouts.reduce((total, workout) => {
+        return total + (workout.completions || []).length; // Assuming `completions` is an array in each workout
+    }, 0);
+    console.log(completionCount.value);
+});
 
 const handleStart = () => {
     console.log('Start');

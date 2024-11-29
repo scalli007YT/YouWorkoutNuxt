@@ -22,7 +22,7 @@ export const useWorkoutStore = defineStore("workoutStore", {
         name,
         musclegroup,
         intensity,
-        completions: 0,
+        completions: {},
       };
 
       // Add the workout to the user's 'workouts' subcollection
@@ -36,13 +36,20 @@ export const useWorkoutStore = defineStore("workoutStore", {
     },
 
     // adding new workouts
-    async updateWorkout(id, name, contents, intensity, musclegroup) {
+    async updateWorkout(
+      id,
+      name,
+      contents,
+      intensity,
+      musclegroup,
+      completions
+    ) {
       const workout = {
         contents,
         name,
         musclegroup,
         intensity,
-        completions: {},
+        completions,
       };
 
       const { $db } = useNuxtApp();

@@ -20,7 +20,8 @@
               <v-tooltip activator="parent" location="right">{{ workout?.musclegroup.join(', ') }}</v-tooltip>
             </v-chip>
             <v-divider vertical inset class="mx-1"></v-divider>
-            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large">{{ workout?.completions }}</v-chip>
+            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large">{{ workout?.completions.length
+              }}</v-chip>
           </v-card-subtitle>
         </v-row>
       </v-col>
@@ -101,6 +102,7 @@ const refreshKey = ref(0);
 const name = ref(props.workout.name);
 const intensity = ref(props.workout.intensity);
 const musclegroup = ref(props.workout.musclegroup);
+const completions = ref(props.workout.completions);
 
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
@@ -124,13 +126,14 @@ const toggleEdit = () => {
   name.value = props.workout.name;
   intensity.value = props.workout.intensity;
   musclegroup.value = [...props.workout.musclegroup];
+  completions.value = [...props.workout.completions];
   dialogState.value = true;
 };
 
 const updateWorkout = async () => {
   try {
     dialogState.value = false;
-    await store.updateWorkout(props.workout.id, name.value, videoStore.video, intensity.value, musclegroup.value);
+    await store.updateWorkout(props.workout.id, name.value, videoStore.video, intensity.value, musclegroup.value, completions.value);
   } catch (error) {
     console.error('Failed to update workout:', error);
   }

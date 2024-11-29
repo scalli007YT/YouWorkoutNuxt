@@ -45,8 +45,9 @@
             </v-chip>
 
             <!-- Completions Chip (Moved here) -->
-            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large" class="pa-4">{{ workout?.completions
-              }}</v-chip>
+            <v-chip prepend-icon="mdi-check-all" variant="outlined" size="large" class="pa-4">{{
+              workout?.completions.length
+            }}</v-chip>
           </v-card-subtitle>
         </v-row>
       </v-col>

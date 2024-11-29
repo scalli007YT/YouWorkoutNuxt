@@ -89,6 +89,7 @@ definePageMeta({
 });
 
 import { ref, computed } from 'vue';
+import { format } from 'date-fns';
 
 interface PlayStore {
   current_tab: number;
@@ -105,7 +106,8 @@ interface Workout {
   link: string;
 }
 
-const playStore = usePlayStore() as PlayStore;
+const playStore = usePlayStore()
+const workoutStore = useWorkoutStore()
 const backDialog = ref(false);
 const startDialog = ref(false);
 const completeDialog = ref(false);
@@ -143,6 +145,7 @@ const addProgressToContents = () => {
     }
   });
 };
+
 const generateUniqueId = (): string => {
   return '_' + Math.random().toString(36).slice(2, 11);  // Use slice instead of substr
 };
@@ -187,9 +190,6 @@ const handleNextButton = (current_video: Workout) => {
   checkState();
 };
 
-
-
-
 const isLastVideo = (current_video: Workout) => {
   const currentIndex = Object.values(playStore.currentWorkout?.contents || {}).findIndex(
     (video) => video.id === current_video.id  // Use the unique id here
@@ -211,7 +211,26 @@ const handleBack = () => {
 };
 
 const handleComplete = (workout: Workout) => {
-  console.log('Workout Completed');
-  completeDialog.value = false;
+  console.log('Completing workout');
+
+  // Remove progress and id from each video
+  Object.values(playStore.currentWorkout?.contents || {}).forEach((video) => {
+    delete video.progress;
+    delete video.id;
+  });
+
+  // Add current timestamp to completions array
+  const currentTimestamp = format(new Date(), 'HH:mm:ss dd.MM.yyyy '); // You can adjust the format as needed
+  playStore.currentWorkout?.completions.push(currentTimestamp);
+  workoutStore.updateUserWorkouts()
+  workoutStore.updateWorkout();
+  workoutStore.updateWorkout(playStore.currentWorkout.id, playStore.currentWorkout.name, playStore.currentWorkout.contents, playStore.currentWorkout.intensity, playStore.currentWorkout.musclegroup, playStore.currentWorkout.completions);
+
+  // Reset the playStore state
+  playStore.$reset();
+
+  // Redirect to the home page
+  const router = useRouter();
+  router.push('/'); // Route to the home page
 };
 </script>
