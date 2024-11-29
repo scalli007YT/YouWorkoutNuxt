@@ -84,7 +84,8 @@
       <v-card-actions>
         <v-row>
           <v-col class="text-left">
-            <v-btn v-if="Content" text="Delete" variant="plain" @click="handleDelete"></v-btn>
+            <v-btn v-if="Content" prepend-icon="mdi-trash-can" text="Delete" variant="outlined" color="danger"
+              @click="handleDelete"></v-btn>
           </v-col>
           <v-col class="text-right">
             <v-btn text="Exit" variant="plain" @click="videoDialog = false"></v-btn>

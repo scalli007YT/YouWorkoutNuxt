@@ -76,11 +76,15 @@
       <v-card-actions>
         <v-row>
           <v-col class="text-left">
-            <v-btn text="Cancel" @click="dialogState = false"></v-btn>
-            <v-btn color="primary" variant="plain" text="Delete" @click="handleDelete"></v-btn>
+            <v-btn prepend-icon="mdi-cancel" text="Cancel" @click="dialogState = false"></v-btn>
+          </v-col>
+          <v-col class="text-center">
+            <v-btn prepend-icon="mdi-trash-can" variant="outlined" color="danger" text="Delete"
+              @click="handleDelete"></v-btn>
           </v-col>
           <v-col class="text-right">
-            <v-btn color="primary" text="Save" variant="outlined" @click="updateWorkout"></v-btn>
+            <v-btn color="primary" prepend-icon="mdi-content-save-edit" text="Save" variant="outlined"
+              @click="updateWorkout"></v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
