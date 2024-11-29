@@ -23,6 +23,9 @@ const workoutDark = {
     success: "#4CAF50",
     warning: "#FB8C00",
     warning_vibrant: "#ea580c",
+    not_started: "#000000",
+    in_progress: "#FB8C00",
+    completed: "#4CAF50",
   },
   variables: {
     "border-color": "#6d28d9",

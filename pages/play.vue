@@ -43,11 +43,10 @@
 
         <!-- Step 3: Workout -->
         <template v-slot:item.3>
-
           <youtubeEmbed v-if="playStore.mode === 'playing'" :videoUrl="playStore.current_video.link"
             :autoplay="playStore.autoplay" :mute="playStore.muted" />
           <CustomTimeline v-if="playStore.mode === 'selection' && playStore.currentWorkout"
-            :contents="playStore.currentWorkout?.contents" @startWorkout="handleButtonClick" />
+            :contents="playStore.currentWorkout?.contents" @startWorkout="handleStartButton" />
 
           <v-row class="mt-4">
             <v-col class="text-left">
@@ -57,8 +56,8 @@
               </v-btn>
             </v-col>
             <v-col class="text-right">
-              <v-btn :color="'primary'" variant="outlined" @click="handleComplete(playStore.currentWorkout)">
-                {{ playStore.mode === 'selection' ? 'Complete Workout' : 'Next Video' }}
+              <v-btn :color="'primary'" variant="outlined" @click="handleNextClick(playStore.current_video)">
+                {{ isLastVideo(playStore.current_video) ? 'Complete Workout' : 'Next Video' }}
               </v-btn>
             </v-col>
           </v-row>
@@ -67,7 +66,7 @@
     </v-card>
   </v-container>
 
-  <!-- Custom Dialogs with Specific Messages -->
+  <!-- Custom Dialogs -->
   <custom-dialog v-model="startDialog" icon="mdi-information-outline" header="Sure to start?"
     message="Once you start the workout, you won't be able to change it without resetting your progress."
     button1-name="Cancel" button2-name="Start" button1-color="" button2-color="success" :max-width="'29em'"
@@ -82,7 +81,7 @@
 <script lang="ts" setup>
 definePageMeta({
   middleware: 'auth'
-})
+});
 
 import { ref, computed } from 'vue';
 
@@ -93,6 +92,7 @@ interface PlayStore {
   muted: boolean;
   autoplay: boolean;
   mode: string;
+  current_video: Object;
 }
 
 interface Workout {
@@ -118,19 +118,74 @@ const settings = [
 
 const cardSizeClass = computed(() => {
   switch (step.value) {
-    case 1: return 'max-w-3xl';
-    case 2: return 'max-w-xl';
-    case 3: return 'max-w-3xl';
+    case 1:
+      return 'max-w-3xl';
+    case 2:
+      return 'max-w-xl';
+    case 3:
+      return 'max-w-3xl';
   }
 });
 
-const handleButtonClick = (current_video: Workout) => {
+const addProgressToContents = () => {
+  Object.values(playStore.currentWorkout?.contents || {}).forEach((video) => {
+    video.progress ??= 'not_started';
+  });
+};
+
+const checkState = () => {
+  if (playStore.current_video.progress === 'not_started') {
+    playStore.current_video.progress = 'in_progress';
+  }
+};
+
+const finishState = () => {
+  playStore.current_video.progress = 'completed';
+};
+
+const handleStartButton = (current_video: Workout) => {
   playStore.mode = 'playing';
-  playStore.current_video = current_video
+  playStore.current_video = current_video;
+  checkState();
+};
+
+const handleNextClick = (current_video: Workout) => {
+  if (isLastVideo(current_video)) {
+    handleComplete(playStore.currentWorkout);
+  } else {
+    handleNextButton(current_video);
+  }
+};
+
+const handleNextButton = (current_video: Workout) => {
+  finishState();
+
+  const currentIndex = Object.values(playStore.currentWorkout?.contents || {}).findIndex(
+    (video) => video.link === current_video.link
+  );
+
+  const nextIndex = currentIndex + 1;
+  const next_video = nextIndex < Object.values(playStore.currentWorkout?.contents || {}).length
+    ? Object.values(playStore.currentWorkout?.contents || {})[nextIndex]
+    : null;
+
+  if (next_video) {
+    playStore.current_video = next_video;
+  }
+
+  checkState();
+};
+
+const isLastVideo = (current_video: Workout) => {
+  const currentIndex = Object.values(playStore.currentWorkout?.contents || {}).findIndex(
+    (video) => video.link === current_video.link
+  );
+  return currentIndex === Object.values(playStore.currentWorkout?.contents || {}).length - 1;
 };
 
 const handleStart = () => {
   step.value++;
+  addProgressToContents();
   startDialog.value = false;
 };
 
@@ -142,6 +197,6 @@ const handleBack = () => {
 };
 
 const handleComplete = (workout: Workout) => {
-  console.log(workout);
+  console.log('Workout Completed');
 };
 </script>

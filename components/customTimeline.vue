@@ -1,7 +1,8 @@
 <template>
   <div class="mx-auto">
     <v-timeline side="end" truncate-line="both">
-      <v-timeline-item v-for="(workout, i) in contents" :key="i" size="small">
+      <v-timeline-item v-for="(workout, i) in contents" :key="i" size="small"
+        :dot-color="playStore.currentWorkout.contents[i].progress">
         <v-card>
           <v-skeleton-loader v-if="loader" type="card" max-height="82"></v-skeleton-loader>
           <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"
@@ -17,9 +18,11 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 
+// Setup loader and playStore
 const loader = ref(true);
+const playStore = usePlayStore()
 
 // Define props with the expected type and required property
 const props = defineProps({
