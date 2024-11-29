@@ -92,14 +92,15 @@ import { ref, computed } from 'vue';
 import { format } from 'date-fns';
 
 interface PlayStore {
-  current_tab: number;
   selected: boolean;
-  currentWorkout: { contents: Array<{ thumbnail: string }> } | null;
+  currentWorkout: { contents: Array<Workout> } | null;
+  current_tab: number;
+  current_video: { link?: string } | null;
   muted: boolean;
   autoplay: boolean;
   mode: string;
-  current_video: Object;
 }
+
 
 interface Workout {
   thumbnail: string;
@@ -223,7 +224,6 @@ const handleComplete = (workout: Workout) => {
   const currentTimestamp = format(new Date(), 'HH:mm:ss dd.MM.yyyy '); // You can adjust the format as needed
   playStore.currentWorkout?.completions.push(currentTimestamp);
   workoutStore.updateUserWorkouts()
-  workoutStore.updateWorkout();
   workoutStore.updateWorkout(playStore.currentWorkout.id, playStore.currentWorkout.name, playStore.currentWorkout.contents, playStore.currentWorkout.intensity, playStore.currentWorkout.musclegroup, playStore.currentWorkout.completions);
 
   // Reset the playStore state
