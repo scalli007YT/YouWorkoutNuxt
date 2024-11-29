@@ -14,11 +14,22 @@
       <UserProfile v-if="isClient && data" />
     </v-app-bar>
 
-    <v-main>
+    <v-main class="h-[95%]">
       <NuxtPage />
     </v-main>
 
+    <!-- Tailwind classes applied to the footer -->
+    <v-footer>
+      <div class="flex justify-end items-center w-full space-x-4 pr-3 border-t pt-2">
+        <div class="text-sm opacity-75">
+          &copy;2024 — <strong>Scalli007</strong>
+        </div>
+        <a href="https://github.com/scalli007YT/YouWorkoutNuxt" target="_blank" rel="noopener noreferrer">
+          <v-icon size="small">mdi-github</v-icon>
+        </a>
 
+      </div>
+    </v-footer>
 
   </v-app>
 </template>
@@ -40,21 +51,11 @@ onMounted(() => {
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'workoutLight' : 'workoutDark';
 }
-
-function openSettings() {
-  console.log('Opening settings...');
-}
-
-// Computed property to determine the dot color based on the theme
-const dotColor = computed(() => {
-  return theme.global.current.value.dark ? '#161616' : '#B3B3B3'; // dark theme: dark color, light theme: light color
-});
-
 </script>
 
 <style scoped>
 .v-application {
-  background: radial-gradient(circle, rgba(var(--v-theme-dots)) 10%, transparent 10%);
+  background: radial-gradient(circle, rgba(var(--v-theme-dots)) 10%, transparent 7%);
   background-position: 0 0;
   background-size: 20px 20px;
 }

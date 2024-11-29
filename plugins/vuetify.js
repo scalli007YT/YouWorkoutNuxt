@@ -15,8 +15,6 @@ const workoutDark = {
     "on-surface-variant": "#B3B3B3",
     primary: "#6d28d9",
     "primary-darken-1": "#3700B3",
-    secondary: "#03DAC6",
-    "secondary-darken-1": "#018786",
     error: "#CF6679",
     danger: "#FF5252",
     info: "#2196F3",
