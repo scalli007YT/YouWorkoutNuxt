@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-app-bar app elevation="15" height="48">
-      <v-app-bar-nav-icon v-if="isClient && data" @click="drawer = !drawer" disabled></v-app-bar-nav-icon>
+      <v-icon class="mx-4">mdi-run</v-icon>
 
       <v-spacer v-if="!data"></v-spacer>
 
-      <v-app-bar-title :class="{ 'text-center': !data }" style="margin: 0;">
+      <v-app-bar-title :class="{ 'text-center': !data }" class="ma-0">
         <NuxtLink to="/">YouWorkout</NuxtLink>
       </v-app-bar-title>
 
