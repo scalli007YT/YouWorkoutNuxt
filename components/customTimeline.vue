@@ -2,7 +2,7 @@
   <div class="mx-auto">
     <v-timeline side="end" truncate-line="both">
       <v-timeline-item v-for="(workout, i) in contents" :key="i" size="small"
-        :dot-color="playStore.currentWorkout.contents[i].progress">
+        :dot-color="playStore.currentWorkout.contents[i].progress" elevation="8">
         <v-card>
           <v-skeleton-loader v-if="loader" type="card" max-height="82"></v-skeleton-loader>
           <v-img :src="workout.thumbnail" alt="Thumbnail" min-width="150" class="rounded-lg"
