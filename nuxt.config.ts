@@ -27,6 +27,7 @@ export default defineNuxtConfig({
       googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
       twitchClientId: process.env.NUXT_TWITCH_CLIENT_ID,
       twitchClientSecret: process.env.NUXT_TWITCH_CLIENT_SECRET,
+      githubRepoUrl: process.env.NUXT_GITHUB_REPO_URL,
     }
   },
 

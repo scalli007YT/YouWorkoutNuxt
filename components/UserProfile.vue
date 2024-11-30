@@ -19,6 +19,11 @@
                 <v-btn block prepend-icon="mdi-cog">Settings</v-btn>
             </v-list-item>
             <v-list-item>
+                <v-btn block prepend-icon="mdi-progress-helper"
+                    :href="`${useRuntimeConfig().public.githubRepoUrl}issues/new`" target="_blank">Create
+                    Issue</v-btn>
+            </v-list-item>
+            <v-list-item>
                 <v-btn block prepend-icon="mdi-logout" @click="signOut()">Log out</v-btn>
             </v-list-item>
         </v-list>

@@ -25,7 +25,7 @@
         <div class="text-sm opacity-75">
           &copy;2024 — <strong>Scalli007</strong>
         </div>
-        <a href="https://github.com/scalli007YT/YouWorkoutNuxt" target="_blank" rel="noopener noreferrer">
+        <a :href="useRuntimeConfig().public.githubRepoUrl" target="_blank" rel="noopener noreferrer">
           <v-icon size="small">mdi-github</v-icon>
         </a>
 
