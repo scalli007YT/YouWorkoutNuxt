@@ -22,6 +22,7 @@
     "@mdi/font": "^7.4.47",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@pinia/nuxt": "^0.7.0",
+    "@vercel/speed-insights": "^1.1.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.1",
     "next-auth": "4.21.1"

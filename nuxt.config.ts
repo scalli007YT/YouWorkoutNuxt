@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "@pinia-plugin-persistedstate/nuxt",
+    "@vercel/speed-insights",
 
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
