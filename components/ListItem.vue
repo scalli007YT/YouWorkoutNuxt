@@ -47,7 +47,7 @@
                     color="primary">Play</v-btn>
                 </v-list-item>
                 <v-list-item>
-                  <v-btn block prepend-icon="mdi-link" @click="handleCopy" variant="elevated"
+                  <v-btn block prepend-icon="mdi-link" @click="handleCopy(props.workout)" variant="elevated"
                     color="primary">Share</v-btn>
                 </v-list-item>
               </v-list>
@@ -115,6 +115,12 @@
     message="An active workout is in progress. Replace it?" button1-name="Cancel" button2-name="Start"
     button2-color="warning" :max-width="'36em'" @confirm="handlePlay(props.workout)" @cancel="warnDialog = false" />
 
+  <!-- Vuetify Snackbar for success alert -->
+  <v-snackbar v-model="snackbar" :timeout="3000" bottom left color="success">
+    <v-icon>mdi-check-circle</v-icon> <!-- Checkmark icon -->
+    {{ snackbarMessage }}
+  </v-snackbar>
+
 
 </template>
 
@@ -137,6 +143,10 @@ const name = ref(props.workout.name);
 const intensity = ref(props.workout.intensity);
 const musclegroup = ref(props.workout.musclegroup);
 const completions = ref(props.workout.completions);
+
+// Vuetify Snackbar state
+const snackbar = ref(false); // Controls the visibility of the snackbar
+const snackbarMessage = ref(''); // Holds the message to be displayed in the snackbar
 
 const card_amount = computed(() => videoStore.getVideoCount() + 1);
 
@@ -193,8 +203,32 @@ function handlePlay(workout: object) {
 }
 
 function handleCopy(workout: object) {
-  console.log('Play button clicked!', workout);
+  store.createShareWorkout(workout).then((id: string) => {
+    const shareableLink = `${window.location.origin + window.location.pathname}?id=${id}`;
+    navigator.clipboard.writeText(shareableLink)
+      .then(() => {
+        console.log("Link copied to clipboard:", shareableLink);
+        // Show Vuetify Snackbar
+        snackbarMessage.value = "Workout link copied to clipboard!";
+        snackbar.value = true;
+      })
+      .catch((err) => {
+        console.error("Error copying link:", err);
+        // Show Vuetify Snackbar with error message
+        snackbarMessage.value = "Failed to copy link. Please try again.";
+        snackbar.value = true;
+      });
+  }).catch((error) => {
+    console.error("Error creating workout:", error);
+    // Show Vuetify Snackbar with error message
+    snackbarMessage.value = "Error creating workout. Please try again.";
+    snackbar.value = true;
+  });
 }
+
+
+
+
 
 </script>
 
