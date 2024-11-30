@@ -4,24 +4,23 @@ import { defineEventHandler, getQuery } from 'h3';
 export default defineEventHandler(async (event: H3Event) => {
   const { url } = getQuery(event);
 
-  // Ensure the URL is valid
   if (!url || typeof url !== 'string') {
-    return { error: 'Invalid URL' };
+    return { statusCode: 400, body: { error: 'Invalid URL' } }; // Proper status code and message format
   }
 
   // URL encode to ensure any special characters are handled
   const encodedUrl = encodeURIComponent(url);
 
-  console.log('Fetching URL:', encodedUrl); // Log URL to help debug
+  console.log('Fetching URL:', encodedUrl);
 
   try {
     // Fetch the URL
-    const response = await fetch(decodeURIComponent(encodedUrl));  // Decode back for use in fetch
-    console.log('Response Status:', response.status); // Log response status
+    const response = await fetch(decodeURIComponent(encodedUrl));
+    console.log('Response Status:', response.status);
 
     // Check if the request was successful
     if (!response.ok) {
-      return { error: `Failed to fetch page. Status: ${response.status}` };
+      return { statusCode: response.status, body: { error: `Failed to fetch page. Status: ${response.status}` } };
     }
 
     // Extract the page content
@@ -31,14 +30,15 @@ export default defineEventHandler(async (event: H3Event) => {
     const titleMatch = html.match(/<title>(.*?)<\/title>/);
 
     if (titleMatch) {
-      // Remove " - YouTube" from the title if present
-      return { title: titleMatch[1].replace(' - YouTube', '') };
+      return {
+        statusCode: 200,
+        body: { title: titleMatch[1].replace(' - YouTube', '') }, // Return a valid body with status code 200
+      };
     } else {
-      return { error: 'Could not extract title' };
+      return { statusCode: 404, body: { error: 'Could not extract title' } }; // Return 404 if title not found
     }
   } catch (error) {
-    // Log and return the error if the fetch fails
     console.log('Error fetching URL:', error);
-    return { error: 'Failed to fetch page' };
+    return { statusCode: 500, body: { error: 'Failed to fetch page' } }; // Return 500 for server errors
   }
 });
