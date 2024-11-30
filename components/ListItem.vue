@@ -80,7 +80,7 @@
           </v-col>
           <v-col class="text-center">
             <v-btn prepend-icon="mdi-trash-can" variant="outlined" color="danger" text="Delete"
-              @click="handleDelete"></v-btn>
+              @click="deleteDialog = true"></v-btn>
           </v-col>
           <v-col class="text-right">
             <v-btn color="primary" prepend-icon="mdi-content-save-edit" text="Save" variant="elevated"
@@ -90,6 +90,10 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <custom-dialog v-model="deleteDialog" icon="mdi-information-outline" header="Confirm Deletion"
+    message="Are you sure you want to delete this content?" button1-name="Cancel" button2-name="Delete"
+    button2-color="danger" :max-width="'36em'" @confirm="handleDelete" @cancel="deleteDialog = false" />
 </template>
 
 <script lang="ts" setup>
@@ -101,6 +105,7 @@ const store = useWorkoutStore();
 const videoStore = useVideoStore();
 
 const dialogState = ref(false);
+const deleteDialog = ref(false);
 const refreshKey = ref(0);
 
 const name = ref(props.workout.name);

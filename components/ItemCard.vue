@@ -24,14 +24,21 @@
 
           <!-- Buttons overlay container -->
           <div class="absolute bottom-0 w-full flex justify-between px-0">
-            <!-- Conditionally set the icon based on props.index -->
-            <v-btn variant="plain" class="rounded-full" @click="handleShiftLeft($event)"
-              :icon="props.index !== 1 ? 'mdi-page-first' : 'none'" />
-            <!-- Right button -->
-            <v-btn variant="plain" class="rounded-full" @click="handleShiftRight($event)"
-              :icon="props.index !== storeLength ? 'mdi-page-last' : 'none'" />
+            <!-- Conditionally render the left button -->
+            <v-btn v-if="props.index !== 1" variant="plain" class="rounded-full" @click="handleShiftLeft($event)"
+              icon="mdi-page-first" />
 
+            <!-- Spacer to keep alignment if left button is hidden -->
+            <div v-else></div>
+
+            <!-- Conditionally render the right button -->
+            <v-btn v-if="props.index !== storeLength" variant="plain" class="rounded-full"
+              @click="handleShiftRight($event)" icon="mdi-page-last" />
+
+            <!-- Spacer to keep alignment if right button is hidden -->
+            <div v-else></div>
           </div>
+
 
         </div>
       </template>
@@ -85,7 +92,7 @@
         <v-row>
           <v-col class="text-left">
             <v-btn v-if="Content" prepend-icon="mdi-trash-can" text="Delete" variant="outlined" color="danger"
-              @click="handleDelete"></v-btn>
+              @click="deleteDialog = true"></v-btn>
           </v-col>
           <v-col class="text-right">
             <v-btn text="Exit" variant="plain" @click="videoDialog = false"></v-btn>
@@ -94,6 +101,11 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <custom-dialog v-model="deleteDialog" icon="mdi-information-outline" header="Confirm Deletion"
+    message="Are you sure you want to delete this content?" button1-name="Cancel" button2-name="Delete"
+    button2-color="danger" :max-width="'36em'" @confirm="handleDelete" @cancel="deleteDialog = false" />
+
 </template>
 
 <script lang="ts" setup>
@@ -109,6 +121,7 @@ const storeLength = ref(Object.keys(videoStore.video).length)
 // Reactive properties
 const Content = ref(false);
 const videoDialog = ref(false);
+const deleteDialog = ref(false);
 const youtubeLink = ref(videoStore.getVideoDetails(props.index).link || ''); // Input link
 const valid = ref(false); // Link validation state
 const videoTitle = ref(videoStore.getVideoDetails(props.index).name || ''); // Video title
