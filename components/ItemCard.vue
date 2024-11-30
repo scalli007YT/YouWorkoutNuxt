@@ -141,14 +141,25 @@ const thumbnail = computed(() => {
 // Fetch video title from YouTube page
 const fetchVideoTitle = async () => {
   try {
+    // Send the API request with the YouTube URL as a query parameter
     const response = await fetch(`/api/fetch-youtube-title?url=${encodeURIComponent(youtubeLink.value)}`);
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error('Failed to fetch video title');
+    }
+
     const data = await response.json();
+
+    // Update video title, handling both valid and invalid responses
     videoTitle.value = data.title || 'Invalid Link';
   } catch (error) {
     console.error('Error fetching video title:', error);
+    // Set error message for failed fetch
     videoTitle.value = 'Error fetching title';
   }
 };
+
 
 // Handle click for adding or editing video
 const handleClick = (event: MouseEvent) => {
