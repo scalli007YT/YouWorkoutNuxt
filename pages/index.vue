@@ -101,7 +101,6 @@ onMounted(async () => {
     completionCount.value = store.workouts.reduce((total, workout) => {
         return total + (workout.completions || []).length; // Assuming `completions` is an array in each workout
     }, 0);
-    console.log(completionCount.value);
 });
 
 const handleStart = () => {

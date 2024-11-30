@@ -33,9 +33,25 @@
               <v-icon size="x-large">mdi-pencil</v-icon>
             </v-btn>
             <v-divider vertical></v-divider>
-            <v-btn flat icon @click="handlePlay(workout)" size="large">
-              <v-icon size="x-large">mdi-play</v-icon>
-            </v-btn>
+
+            <v-menu v-model="openMenu" offset-y>
+              <template v-slot:activator="{ props }">
+
+                <v-btn flat icon v-bind="props" size="large">
+                  <v-icon size="x-large">{{ openMenu ? 'mdi-close' : 'mdi-dots-horizontal' }}</v-icon>
+                </v-btn>
+              </template>
+              <v-list class="border rounded-lg">
+                <v-list-item>
+                  <v-btn block prepend-icon="mdi-play" @click="handleCheckState(props.workout)" variant="elevated"
+                    color="primary">Play</v-btn>
+                </v-list-item>
+                <v-list-item>
+                  <v-btn block prepend-icon="mdi-link" @click="handleCopy" variant="elevated"
+                    color="primary">Share</v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-chip>
         </v-row>
       </v-col>
@@ -94,6 +110,12 @@
   <custom-dialog v-model="deleteDialog" icon="mdi-information-outline" header="Confirm Deletion"
     message="Are you sure you want to delete this content?" button1-name="Cancel" button2-name="Delete"
     button2-color="danger" :max-width="'36em'" @confirm="handleDelete" @cancel="deleteDialog = false" />
+
+  <custom-dialog v-model="warnDialog" icon="mdi-information-outline" header="Confirm Loading"
+    message="An active workout is in progress. Replace it?" button1-name="Cancel" button2-name="Start"
+    button2-color="warning" :max-width="'36em'" @confirm="handlePlay(props.workout)" @cancel="warnDialog = false" />
+
+
 </template>
 
 <script lang="ts" setup>
@@ -103,10 +125,13 @@ const props = defineProps({
 
 const store = useWorkoutStore();
 const videoStore = useVideoStore();
+const playStore = usePlayStore();
 
 const dialogState = ref(false);
 const deleteDialog = ref(false);
 const refreshKey = ref(0);
+const openMenu = ref(false);
+const warnDialog = ref(false);
 
 const name = ref(props.workout.name);
 const intensity = ref(props.workout.intensity);
@@ -148,9 +173,29 @@ const updateWorkout = async () => {
   }
 };
 
+
+function handleCheckState(workout: object) {
+  if (playStore.current_tab > 1) {
+    warnDialog.value = true;
+  } else {
+    handlePlay(workout);
+  }
+}
+
 function handlePlay(workout: object) {
+  playStore.$reset()
+  playStore.loadWorkout(workout.id);
+  playStore.current_tab = 2
+
+  // Redirect to the home page
+  const router = useRouter();
+  router.push('/play'); // Route to the home page
+}
+
+function handleCopy(workout: object) {
   console.log('Play button clicked!', workout);
 }
+
 </script>
 
 <style scoped>
