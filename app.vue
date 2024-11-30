@@ -1,4 +1,5 @@
 <template>
+  <SpeedInsights />
   <v-app>
     <v-app-bar app elevation="15" height="48">
       <v-icon class="mx-4">mdi-run</v-icon>
@@ -41,6 +42,7 @@ const isClient = ref(false);
 const { data } = useAuth();
 import UserProfile from './components/UserProfile.vue';
 import { useTheme } from 'vuetify';
+import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 
 const theme = useTheme();
 
