@@ -1,4 +1,5 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   
@@ -30,10 +31,10 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    baseURL: process.env.NUXT_VERCEL_URL ? `https://${process.env.NUXT_VERCEL_URL}` : `http://localhost:${process.env.PORT || 3000}`,
+    baseURL: process.env.NUXT_VERCEL_URL 
+      ? `https://${process.env.NUXT_VERCEL_URL}`  // For production on Vercel
+      : `http://localhost:${process.env.PORT || 3000}`,  // For local development
   },
-  
-  
 
   vite: {
     vue: {
@@ -42,6 +43,7 @@ export default defineNuxtConfig({
       },
     },
   },
+  
   build: {
     transpile: ['vuetify'],
   },
