@@ -30,8 +30,10 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    baseURL: `http://localhost:${process.env.PORT || 3000}`
+    baseURL: process.env.NUXT_VERCEL_URL ? `https://${process.env.NUXT_VERCEL_URL}` : `http://localhost:${process.env.PORT || 3000}`,
   },
+  
+  
 
   vite: {
     vue: {
