@@ -3,7 +3,7 @@
     <v-card :prepend-icon="icon" :title="header" class="mx-auto pa-3 rounded-xl text-center" append-icon="none">
       <v-divider class="mx-4"></v-divider>
       <v-card-text class="text-h6 font-weight-medium pa-4">{{ message }}</v-card-text>
-      <v-divider class="mx-4"></v-divider>
+      <v-divider class="mx-4 mb-2"></v-divider>
       <v-card-actions class="mx-2">
         <v-row>
           <v-col class="text-left">

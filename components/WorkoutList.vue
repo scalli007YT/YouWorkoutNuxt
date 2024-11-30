@@ -66,8 +66,8 @@ const importDialog = ref(false);
   </v-list>
 
   <!-- Ensure dialog is only shown if workout is loaded and has a name -->
-  <custom-dialog v-if="loaded_workout" v-model="importDialog" icon="mdi-information-outline" header="Importing"
-    :message="'Want to import ' + loaded_workout.name + '?'" button1-name="Cancel" button2-name="Start"
+  <custom-dialog v-if="loaded_workout" v-model="importDialog" icon="mdi-information-outline" header="Import?"
+    :message="'Want to import ' + loaded_workout.name + '?'" button1-name="Cancel" button2-name="Import"
     button2-color="warning" :max-width="'36em'" @confirm="addWorkoutToStore()" @cancel="importDialog = false" />
 
 
