@@ -1,75 +1,33 @@
-# Nuxt UI Minimal Starter
+<h1 align="center" id="title">YouWorkout</h1>
 
-Look at [Nuxt docs](https://nuxt.com/docs/getting-started/introduction) and [Nuxt UI docs](https://ui.nuxt.com) to learn more.
+<p align="center"><img src="https://socialify.git.ci/scalli007YT/YouWorkoutNuxt/image?issues=1&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Plus&amp;stargazers=1&amp;theme=Light" alt="project-image"></p>
 
-## Setup
+<p id="description">YouWorkout is a fitness app built with Nuxt.js that helps users track workouts. Each workout consists of multiple YouTube videos the user adds.</p>
 
-Make sure to install the dependencies:
+<h2>🛠️ Installation Steps:</h2>
 
-```bash
-# npm
-npm install
+<p>1. Installation</p>
 
-# pnpm
-pnpm install
-
-# yarn
+```
 yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+<p>2. Starting development Server</p>
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
+```
 yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+<h2>💻 Built with</h2>
 
-Build the application for production:
+Technologies used in the project:
 
-```bash
-# npm
-npm run build
+- Vuetify
+- Nuxt
+- Pinia
+- Sidebase Auth
+- Vercel
 
-# pnpm
-pnpm run build
+<h2>🛡️ License:</h2>
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+This project is licensed under the MIT
