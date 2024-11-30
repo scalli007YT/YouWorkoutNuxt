@@ -2,17 +2,17 @@
   <SpeedInsights />
   <v-app>
     <v-app-bar app elevation="15" height="48">
-      <v-icon v-if="data" class="mx-4">mdi-run</v-icon>
+      <v-icon v-if="authData" class="mx-4">mdi-run</v-icon>
 
-      <v-spacer v-if="!data"></v-spacer>
+      <v-spacer v-if="!authData"></v-spacer>
 
-      <v-app-bar-title :class="{ 'text-center': !data }" class="ma-0">
+      <v-app-bar-title :class="{ 'text-center': !authData }" class="ma-0">
         <NuxtLink to="/">YouWorkout</NuxtLink>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>
 
-      <UserProfile v-if="isClient && data" />
+      <UserProfile v-if="isClient && authData" />
     </v-app-bar>
 
     <v-main class="h-[95%]">
@@ -20,15 +20,18 @@
     </v-main>
 
     <!-- Tailwind classes applied to the footer -->
-    <v-footer>
+    <v-footer class="d-flex justify-between align-center">
       <div class="flex justify-end items-center w-full space-x-4 pr-3 border-t pt-2">
-        <div class="text-sm opacity-75">
-          &copy;2024 — <strong>Scalli007</strong>
+        <div class="text-sm opacity-50">
+          &copy;2024 — <span>Scalli007</span>
         </div>
         <a :href="useRuntimeConfig().public.githubRepoUrl" target="_blank" rel="noopener noreferrer">
-          <v-icon size="small">mdi-github</v-icon>
+          <v-icon size="small" class="text-opacity-50">mdi-github</v-icon>
         </a>
-
+        <a :href="`${useRuntimeConfig().public.githubRepoUrl}commit/${commitId}`" target="_blank"
+          rel="noopener noreferrer">
+          <span class="text-sm opacity-50">{{ commitId?.slice(0, 7) }}</span>
+        </a>
       </div>
     </v-footer>
 
@@ -36,13 +39,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
-const drawer = ref(false);
-const isClient = ref(false);
-const { data } = useAuth();
-import UserProfile from './components/UserProfile.vue';
+import { ref, onMounted } from 'vue';
 import { useTheme } from 'vuetify';
 import { SpeedInsights } from '@vercel/speed-insights/nuxt';
+import UserProfile from './components/UserProfile.vue';
+
+// Auth data
+const { data: authData } = useAuth();
+
+
+const { data: commitResponse, error: fetchError } = await useFetch('/api/latest-commit');
+const commitId = ref(commitResponse?.value.commitId)
+
+// Client-side rendering check
+const isClient = ref(false);
 
 const theme = useTheme();
 

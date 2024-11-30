@@ -31,7 +31,7 @@
 
           <v-row class="mt-4">
             <v-col class="text-left">
-              <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="outlined"
+              <v-btn color="surface-variant" text="Back" :disabled="!playStore.selected" variant="elevated"
                 @click="step = 1" :title="!playStore.selected ? 'Select a playlist first' : ''" />
             </v-col>
             <v-col class="text-right">
@@ -50,7 +50,7 @@
 
           <v-row class="mt-4">
             <v-col class="text-left">
-              <v-btn :color="'surface-variant'" variant="outlined"
+              <v-btn :color="'surface-variant'" variant="elevated"
                 @click="playStore.mode === 'selection' ? backDialog = true : playStore.mode = 'selection'">
                 {{ playStore.mode === 'selection' ? 'Back to Selection' : 'Back to List' }}
               </v-btn>
