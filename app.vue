@@ -2,7 +2,7 @@
   <SpeedInsights />
   <v-app>
     <v-app-bar app elevation="15" height="48">
-      <v-icon class="mx-4">mdi-run</v-icon>
+      <v-icon v-if="data" class="mx-4">mdi-run</v-icon>
 
       <v-spacer v-if="!data"></v-spacer>
 
